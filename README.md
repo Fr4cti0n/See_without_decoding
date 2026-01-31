@@ -1,3 +1,9 @@
+# See Without Decoding (GitHub Repository)
+
+This repository hosts the codebase for the paper "See Without Decoding." BAFE (Box-Aligned Feature Extraction) is a core component used in the paper, and the details below remain the primary reference for that module.
+
+**Status:** Accepted to ESANN 2026.
+
 # BAFE Model (Box-Aligned Feature Extraction)
 
 ## What is BAFE?
