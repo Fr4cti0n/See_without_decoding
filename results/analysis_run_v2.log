@@ -1,0 +1,290 @@
+================================
+Moving Objects Analysis
+================================
+
+✅ Dataset factory imported successfully
+🖥️  Using device: cuda
+
+🔍 Running ANALYSIS-ONLY mode (identifying moving objects)
+   To run full evaluation with model inference, use --no-analysis_only
+
+
+================================================================================
+🎯 EVALUATING MV MODEL ON MOVING OBJECTS ONLY (STATIC CAMERAS)
+================================================================================
+📊 Motion threshold: 10.0 pixels
+📊 IoU threshold: 0.5
+
+
+================================================================================
+📊 Evaluating MOT17
+================================================================================
+
+📁 Loading MOT17 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot17']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT17 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 7 video sequences. Scanning GOP indices...
+         [1/7] MOT17-01-SDP_960x960_gop50_500... ✓ (9 GOPs)
+         [2/7] MOT17-07-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [3/7] MOT17-03-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [4/7] MOT17-06-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [5/7] MOT17-08-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [6/7] MOT17-12-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [7/7] MOT17-14-SDP_960x960_gop50_500... ✓ (10 GOPs)
+      ✅ Scanned 7 sequences, found 69 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 69 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 69 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 69
+   ✅ Loaded 4140 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 19 static camera GOPs
+
+🔍 Analyzing object motion...
+Analyzing GOPs:   0%|          | 0/19 [00:00<?, ?it/s]Analyzing GOPs: 100%|██████████| 19/19 [00:00<00:00, 244.22it/s]
+   ⚠️ Error processing GOP 0: len() of a 0-d tensor
+   ⚠️ Error processing GOP 1: len() of a 0-d tensor
+   ⚠️ Error processing GOP 2: len() of a 0-d tensor
+   ⚠️ Error processing GOP 3: len() of a 0-d tensor
+   ⚠️ Error processing GOP 4: len() of a 0-d tensor
+   ⚠️ Error processing GOP 5: len() of a 0-d tensor
+   ⚠️ Error processing GOP 6: len() of a 0-d tensor
+   ⚠️ Error processing GOP 7: len() of a 0-d tensor
+   ⚠️ Error processing GOP 8: len() of a 0-d tensor
+   ⚠️ Error processing GOP 19: len() of a 0-d tensor
+   ⚠️ Error processing GOP 20: len() of a 0-d tensor
+   ⚠️ Error processing GOP 21: len() of a 0-d tensor
+   ⚠️ Error processing GOP 22: len() of a 0-d tensor
+   ⚠️ Error processing GOP 23: len() of a 0-d tensor
+   ⚠️ Error processing GOP 24: len() of a 0-d tensor
+   ⚠️ Error processing GOP 25: len() of a 0-d tensor
+   ⚠️ Error processing GOP 26: len() of a 0-d tensor
+   ⚠️ Error processing GOP 27: len() of a 0-d tensor
+   ⚠️ Error processing GOP 28: len() of a 0-d tensor
+
+📊 Motion Analysis:
+   Total GOPs: 19
+   GOPs with moving objects: 0
+   Total objects: 0
+   Moving objects: 0 (0.0%)
+   Static objects: 0 (100.0%)
+
+================================================================================
+📊 Evaluating MOT15
+================================================================================
+
+📁 Loading MOT15 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot15']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT15 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 11 video sequences. Scanning GOP indices...
+         [1/11] ADL-Rundle-3_960x960_gop50_500... ✓ (10 GOPs)
+         [2/11] ETH-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [3/11] KITTI-19_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/11] ADL-Rundle-1_960x960_gop50_500... ✓ (10 GOPs)
+         [5/11] TUD-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [6/11] KITTI-16_960x960_gop50_500fram... ✓ (5 GOPs)
+         [7/11] Venice-1_960x960_gop50_500fram... ✓ (9 GOPs)
+         [8/11] PETS09-S2L2_960x960_gop50_500f... ✓ (9 GOPs)
+         [9/11] AVG-TownCentre_960x960_gop50_5... ✓ (9 GOPs)
+         [10/11] ETH-Jelmoli_960x960_gop50_500f... ✓ (9 GOPs)
+         [11/11] ETH-Linthescher_960x960_gop50_... ✓ (10 GOPs)
+      ✅ Scanned 11 sequences, found 91 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 91 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 91 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 91
+   ✅ Loaded 5460 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 47 static camera GOPs
+
+🔍 Analyzing object motion...
+Analyzing GOPs:   0%|          | 0/47 [00:00<?, ?it/s]Analyzing GOPs:  55%|█████▌    | 26/47 [00:00<00:00, 257.00it/s]Analyzing GOPs: 100%|██████████| 47/47 [00:00<00:00, 245.40it/s]
+   ⚠️ Error processing GOP 0: len() of a 0-d tensor
+   ⚠️ Error processing GOP 1: len() of a 0-d tensor
+   ⚠️ Error processing GOP 2: len() of a 0-d tensor
+   ⚠️ Error processing GOP 3: len() of a 0-d tensor
+   ⚠️ Error processing GOP 4: len() of a 0-d tensor
+   ⚠️ Error processing GOP 5: len() of a 0-d tensor
+   ⚠️ Error processing GOP 6: len() of a 0-d tensor
+   ⚠️ Error processing GOP 7: len() of a 0-d tensor
+   ⚠️ Error processing GOP 8: len() of a 0-d tensor
+   ⚠️ Error processing GOP 9: len() of a 0-d tensor
+   ⚠️ Error processing GOP 35: len() of a 0-d tensor
+   ⚠️ Error processing GOP 36: len() of a 0-d tensor
+   ⚠️ Error processing GOP 37: len() of a 0-d tensor
+   ⚠️ Error processing GOP 38: len() of a 0-d tensor
+   ⚠️ Error processing GOP 39: len() of a 0-d tensor
+   ⚠️ Error processing GOP 40: len() of a 0-d tensor
+   ⚠️ Error processing GOP 41: len() of a 0-d tensor
+   ⚠️ Error processing GOP 42: len() of a 0-d tensor
+   ⚠️ Error processing GOP 43: len() of a 0-d tensor
+   ⚠️ Error processing GOP 44: len() of a 0-d tensor
+   ⚠️ Error processing GOP 45: len() of a 0-d tensor
+   ⚠️ Error processing GOP 46: len() of a 0-d tensor
+   ⚠️ Error processing GOP 47: len() of a 0-d tensor
+   ⚠️ Error processing GOP 48: len() of a 0-d tensor
+   ⚠️ Error processing GOP 49: len() of a 0-d tensor
+   ⚠️ Error processing GOP 60: len() of a 0-d tensor
+   ⚠️ Error processing GOP 61: len() of a 0-d tensor
+   ⚠️ Error processing GOP 62: len() of a 0-d tensor
+   ⚠️ Error processing GOP 63: len() of a 0-d tensor
+   ⚠️ Error processing GOP 64: len() of a 0-d tensor
+   ⚠️ Error processing GOP 65: len() of a 0-d tensor
+   ⚠️ Error processing GOP 66: len() of a 0-d tensor
+   ⚠️ Error processing GOP 67: len() of a 0-d tensor
+   ⚠️ Error processing GOP 68: len() of a 0-d tensor
+   ⚠️ Error processing GOP 69: len() of a 0-d tensor
+   ⚠️ Error processing GOP 70: len() of a 0-d tensor
+   ⚠️ Error processing GOP 71: len() of a 0-d tensor
+
+📊 Motion Analysis:
+   Total GOPs: 47
+   GOPs with moving objects: 0
+   Total objects: 0
+   Moving objects: 0 (0.0%)
+   Static objects: 0 (100.0%)
+
+================================================================================
+📊 Evaluating MOT20
+================================================================================
+
+📁 Loading MOT20 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot20']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT20 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 4 video sequences. Scanning GOP indices...
+         [1/4] MOT20-06_960x960_gop50_500fram... ✓ (10 GOPs)
+         [2/4] MOT20-07_960x960_gop50_500fram... ✓ (10 GOPs)
+         [3/4] MOT20-04_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/4] MOT20-08_960x960_gop50_500fram... ✓ (10 GOPs)
+      ✅ Scanned 4 sequences, found 40 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 40 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 40 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 40
+   ✅ Loaded 2400 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 40 static camera GOPs
+
+🔍 Analyzing object motion...
+Analyzing GOPs:   0%|          | 0/40 [00:00<?, ?it/s]Analyzing GOPs:  62%|██████▎   | 25/40 [00:00<00:00, 245.52it/s]Analyzing GOPs: 100%|██████████| 40/40 [00:00<00:00, 250.62it/s]
+   ⚠️ Error processing GOP 0: len() of a 0-d tensor
+   ⚠️ Error processing GOP 1: len() of a 0-d tensor
+   ⚠️ Error processing GOP 2: len() of a 0-d tensor
+   ⚠️ Error processing GOP 3: len() of a 0-d tensor
+   ⚠️ Error processing GOP 4: len() of a 0-d tensor
+   ⚠️ Error processing GOP 5: len() of a 0-d tensor
+   ⚠️ Error processing GOP 6: len() of a 0-d tensor
+   ⚠️ Error processing GOP 7: len() of a 0-d tensor
+   ⚠️ Error processing GOP 8: len() of a 0-d tensor
+   ⚠️ Error processing GOP 9: len() of a 0-d tensor
+   ⚠️ Error processing GOP 10: len() of a 0-d tensor
+   ⚠️ Error processing GOP 11: len() of a 0-d tensor
+   ⚠️ Error processing GOP 12: len() of a 0-d tensor
+   ⚠️ Error processing GOP 13: len() of a 0-d tensor
+   ⚠️ Error processing GOP 14: len() of a 0-d tensor
+   ⚠️ Error processing GOP 15: len() of a 0-d tensor
+   ⚠️ Error processing GOP 16: len() of a 0-d tensor
+   ⚠️ Error processing GOP 17: len() of a 0-d tensor
+   ⚠️ Error processing GOP 18: len() of a 0-d tensor
+   ⚠️ Error processing GOP 19: len() of a 0-d tensor
+   ⚠️ Error processing GOP 20: len() of a 0-d tensor
+   ⚠️ Error processing GOP 21: len() of a 0-d tensor
+   ⚠️ Error processing GOP 22: len() of a 0-d tensor
+   ⚠️ Error processing GOP 23: len() of a 0-d tensor
+   ⚠️ Error processing GOP 24: len() of a 0-d tensor
+   ⚠️ Error processing GOP 25: len() of a 0-d tensor
+   ⚠️ Error processing GOP 26: len() of a 0-d tensor
+   ⚠️ Error processing GOP 27: len() of a 0-d tensor
+   ⚠️ Error processing GOP 28: len() of a 0-d tensor
+   ⚠️ Error processing GOP 29: len() of a 0-d tensor
+   ⚠️ Error processing GOP 30: len() of a 0-d tensor
+   ⚠️ Error processing GOP 31: len() of a 0-d tensor
+   ⚠️ Error processing GOP 32: len() of a 0-d tensor
+   ⚠️ Error processing GOP 33: len() of a 0-d tensor
+   ⚠️ Error processing GOP 34: len() of a 0-d tensor
+   ⚠️ Error processing GOP 35: len() of a 0-d tensor
+   ⚠️ Error processing GOP 36: len() of a 0-d tensor
+   ⚠️ Error processing GOP 37: len() of a 0-d tensor
+   ⚠️ Error processing GOP 38: len() of a 0-d tensor
+   ⚠️ Error processing GOP 39: len() of a 0-d tensor
+
+📊 Motion Analysis:
+   Total GOPs: 40
+   GOPs with moving objects: 0
+   Total objects: 0
+   Moving objects: 0 (0.0%)
+   Static objects: 0 (100.0%)
+
+💾 Results saved to: results/moving_objects_analysis.json
+
+================================================================================
+📊 SUMMARY - MOVING OBJECTS ANALYSIS
+================================================================================
+
+Dataset    Total GOPs   Moving GOPs    Total Obj    Moving Obj   Motion %  
+--------------------------------------------------------------------------------
+MOT17      19           0              0            0            0.0       
+MOT15      47           0              0            0            0.0       
+MOT20      40           0              0            0            0.0       
+
+================================================================================
+💡 JUSTIFICATION
+================================================================================
+
+Static objects may show 'false motion' due to:
+  • Illumination changes across frames
+  • Video compression/reconstruction artifacts
+  • Minor camera vibration or lens effects
+
+By filtering to ONLY moving objects, we evaluate the MV model's
+true advantage: tracking objects that actually change position.
+The I-frame baseline assumes objects don't move, so it should
+fail on moving objects while succeeding on truly static ones.
+
+
+================================
+Analysis complete!
+Results saved to: results/moving_objects_analysis.json
+================================

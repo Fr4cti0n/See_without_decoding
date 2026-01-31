@@ -1,0 +1,548 @@
+✅ Dataset factory imported successfully
+🖥️  Using device: cuda
+
+📦 Loading MV model from: experiments/ablation_fast/mv_only/best_model.pt
+🧠 Creating MV-Center V1 model...
+   ⚡ Using FAST DCT-MV model (no ROI, no attention)
+      - DCT residuals: 0 coefficients
+      - Motion vectors: enabled
+      - Architecture: Global pooling + Simple LSTM
+      - Expected speedup: ~2-3x faster than standard model
+      🔬 Ablation config: mv_channels=2, dct_channels=0
+   🎯 Using DETR-style detection loss:
+      - Hungarian matching for optimal object assignment
+      - Focal Loss (α=0.25, γ=2.0)
+      - Box weight: 5.0, GIoU weight: 2.0
+      - Class weight: 2.0, No-object weight: 0.1
+   ✅ Model loaded successfully
+   📊 Model config: version=v1, use_mv_only=False
+
+================================================================================
+🔬 THREE-METHOD COMPARISON: Mean-VC vs I-frame vs MV Model
+================================================================================
+📊 Motion threshold: 0.01 (normalized)
+📊 IoU threshold: 0.5
+
+
+================================================================================
+📊 Evaluating MOT17
+================================================================================
+
+📁 Loading MOT17 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot17']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT17 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 7 video sequences. Scanning GOP indices...
+         [1/7] MOT17-01-SDP_960x960_gop50_500... ✓ (9 GOPs)
+         [2/7] MOT17-07-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [3/7] MOT17-03-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [4/7] MOT17-06-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [5/7] MOT17-08-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [6/7] MOT17-12-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [7/7] MOT17-14-SDP_960x960_gop50_500... ✓ (10 GOPs)
+      ✅ Scanned 7 sequences, found 69 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 69 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 69 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 69
+   ✅ Loaded 4140 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 19 static camera GOPs
+Evaluating MOT17:   0%|          | 0/19 [00:00<?, ?it/s]Evaluating MOT17:   5%|▌         | 1/19 [00:01<00:28,  1.57s/it]Evaluating MOT17:  11%|█         | 2/19 [00:02<00:22,  1.31s/it]Evaluating MOT17:  16%|█▌        | 3/19 [00:03<00:19,  1.23s/it]Evaluating MOT17:  21%|██        | 4/19 [00:04<00:17,  1.19s/it]Evaluating MOT17:  26%|██▋       | 5/19 [00:06<00:17,  1.25s/it]Evaluating MOT17:  32%|███▏      | 6/19 [00:07<00:15,  1.20s/it]Evaluating MOT17:  37%|███▋      | 7/19 [00:08<00:14,  1.19s/it]Evaluating MOT17:  42%|████▏     | 8/19 [00:09<00:13,  1.26s/it]Evaluating MOT17:  47%|████▋     | 9/19 [00:11<00:12,  1.22s/it]Evaluating MOT17:  53%|█████▎    | 10/19 [00:12<00:10,  1.22s/it]Evaluating MOT17:  58%|█████▊    | 11/19 [00:13<00:09,  1.21s/it]Evaluating MOT17:  63%|██████▎   | 12/19 [00:14<00:08,  1.20s/it]Evaluating MOT17:  68%|██████▊   | 13/19 [00:15<00:07,  1.20s/it]Evaluating MOT17:  74%|███████▎  | 14/19 [00:17<00:06,  1.25s/it]Evaluating MOT17:  79%|███████▉  | 15/19 [00:18<00:04,  1.24s/it]Evaluating MOT17:  84%|████████▍ | 16/19 [00:19<00:03,  1.23s/it]Evaluating MOT17:  89%|████████▉ | 17/19 [00:20<00:02,  1.22s/it]Evaluating MOT17:  95%|█████████▍| 18/19 [00:22<00:01,  1.23s/it]Evaluating MOT17: 100%|██████████| 19/19 [00:23<00:00,  1.24s/it]Evaluating MOT17: 100%|██████████| 19/19 [00:23<00:00,  1.23s/it]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 20, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 21, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 19, 128), got [1, 18, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 20, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 21, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 24, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 22, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 24, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 25, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 20, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 23, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 20, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 21, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 34: Expected hidden[0] size (1, 20, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 22, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 22, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 25, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 27, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 22, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 23, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 17, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 19, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 20, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 36, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 40, 128), got [1, 36, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 42, 128), got [1, 40, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 32, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 34, 128), got [1, 32, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 30, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 31, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 33, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 28, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 32, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 33, 128), got [1, 32, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 33, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 35, 128), got [1, 33, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 37, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 32, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 34, 128), got [1, 32, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 37, 128), got [1, 34, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 33, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 36, 128), got [1, 33, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 37, 128), got [1, 36, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 36, 128), got [1, 33, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 39, 128), got [1, 36, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 41, 128), got [1, 39, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 44, 128), got [1, 41, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 47, 128), got [1, 44, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 43, 128), got [1, 38, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 46, 128), got [1, 43, 128]
+
+📊 Results for MOT17:
+
+   I-frame Baseline:
+      Moving objects (404): mAP = 0.4794
+      Static objects (187): mAP = 0.8850
+
+   Mean-VC Baseline:
+      Moving objects (404): mAP = 0.7268
+      Static objects (187): mAP = 0.8606
+
+   MV Model:
+      Moving objects (404): mAP = 0.9834
+      Static objects (187): mAP = 0.9947
+
+================================================================================
+📊 Evaluating MOT15
+================================================================================
+
+📁 Loading MOT15 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot15']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT15 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 11 video sequences. Scanning GOP indices...
+         [1/11] ADL-Rundle-3_960x960_gop50_500... ✓ (10 GOPs)
+         [2/11] ETH-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [3/11] KITTI-19_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/11] ADL-Rundle-1_960x960_gop50_500... ✓ (10 GOPs)
+         [5/11] TUD-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [6/11] KITTI-16_960x960_gop50_500fram... ✓ (5 GOPs)
+         [7/11] Venice-1_960x960_gop50_500fram... ✓ (9 GOPs)
+         [8/11] PETS09-S2L2_960x960_gop50_500f... ✓ (9 GOPs)
+         [9/11] AVG-TownCentre_960x960_gop50_5... ✓ (9 GOPs)
+         [10/11] ETH-Jelmoli_960x960_gop50_500f... ✓ (9 GOPs)
+         [11/11] ETH-Linthescher_960x960_gop50_... ✓ (10 GOPs)
+      ✅ Scanned 11 sequences, found 91 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 91 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 91 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 91
+   ✅ Loaded 5460 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 47 static camera GOPs
+Evaluating MOT15:   0%|          | 0/47 [00:00<?, ?it/s]Evaluating MOT15:   2%|▏         | 1/47 [00:01<00:52,  1.14s/it]Evaluating MOT15:   4%|▍         | 2/47 [00:02<00:52,  1.16s/it]Evaluating MOT15:   6%|▋         | 3/47 [00:03<00:50,  1.16s/it]Evaluating MOT15:   9%|▊         | 4/47 [00:04<00:49,  1.15s/it]Evaluating MOT15:  11%|█         | 5/47 [00:05<00:48,  1.16s/it]Evaluating MOT15:  13%|█▎        | 6/47 [00:06<00:47,  1.16s/it]Evaluating MOT15:  15%|█▍        | 7/47 [00:08<00:46,  1.15s/it]Evaluating MOT15:  17%|█▋        | 8/47 [00:09<00:48,  1.24s/it]Evaluating MOT15:  19%|█▉        | 9/47 [00:11<00:50,  1.32s/it]Evaluating MOT15:  21%|██▏       | 10/47 [00:12<00:49,  1.34s/it]Evaluating MOT15:  23%|██▎       | 11/47 [00:13<00:45,  1.27s/it]Evaluating MOT15:  26%|██▌       | 12/47 [00:14<00:43,  1.24s/it]Evaluating MOT15:  28%|██▊       | 13/47 [00:15<00:40,  1.20s/it]Evaluating MOT15:  30%|██▉       | 14/47 [00:16<00:31,  1.04it/s]Evaluating MOT15:  34%|███▍      | 16/47 [00:17<00:23,  1.33it/s]Evaluating MOT15:  36%|███▌      | 17/47 [00:18<00:24,  1.23it/s]Evaluating MOT15:  38%|███▊      | 18/47 [00:19<00:25,  1.14it/s]Evaluating MOT15:  40%|████      | 19/47 [00:20<00:27,  1.01it/s]Evaluating MOT15:  45%|████▍     | 21/47 [00:21<00:21,  1.20it/s]Evaluating MOT15:  47%|████▋     | 22/47 [00:22<00:22,  1.09it/s]Evaluating MOT15:  49%|████▉     | 23/47 [00:24<00:24,  1.03s/it]Evaluating MOT15:  51%|█████     | 24/47 [00:25<00:24,  1.06s/it]Evaluating MOT15:  53%|█████▎    | 25/47 [00:27<00:26,  1.21s/it]Evaluating MOT15:  55%|█████▌    | 26/47 [00:28<00:25,  1.23s/it]Evaluating MOT15:  57%|█████▋    | 27/47 [00:30<00:27,  1.36s/it]Evaluating MOT15:  60%|█████▉    | 28/47 [00:31<00:28,  1.50s/it]Evaluating MOT15:  62%|██████▏   | 29/47 [00:33<00:26,  1.45s/it]Evaluating MOT15:  64%|██████▍   | 30/47 [00:34<00:22,  1.35s/it]Evaluating MOT15:  66%|██████▌   | 31/47 [00:35<00:20,  1.31s/it]Evaluating MOT15:  68%|██████▊   | 32/47 [00:36<00:19,  1.30s/it]Evaluating MOT15:  70%|███████   | 33/47 [00:38<00:17,  1.27s/it]Evaluating MOT15:  72%|███████▏  | 34/47 [00:39<00:16,  1.25s/it]   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 16, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 17, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 25: Expected hidden[0] size (1, 12, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 15, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 37: Expected hidden[0] size (1, 16, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 18, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 16, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 17, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 13, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 14, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 15, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 15, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 16, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 18, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 16, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 18, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 15, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 16, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 24: Expected hidden[0] size (1, 13, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 26: Expected hidden[0] size (1, 12, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 14, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 17, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 13, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 16, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 17, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 23: Expected hidden[0] size (1, 13, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 14, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 15, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 7, 128), got [1, 6, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 8, 128), got [1, 7, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 9, 128), got [1, 8, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 7, 128), got [1, 6, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 9, 128), got [1, 8, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 7, 128), got [1, 6, 128]
+   ⚠️ Model forward error at frame 27: Expected hidden[0] size (1, 6, 128), got [1, 7, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 8, 128), got [1, 6, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 9, 128), got [1, 8, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 9, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 16, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 18, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 10, 128), got [1, 8, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 11, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 37: Expected hidden[0] size (1, 10, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 43: Expected hidden[0] size (1, 9, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 11, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 14, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 12, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 14, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 16, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 11, 128), got [1, 9, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 12, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 12, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 12, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 15, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 16, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 12, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 15, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 11, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 12, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 12, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 13, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 16, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 14, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 17, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 18, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 17, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 20, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 25, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 17, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 19, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 15, 128), got [1, 13, 128]
+Evaluating MOT15:  74%|███████▍  | 35/47 [00:40<00:14,  1.23s/it]Evaluating MOT15:  77%|███████▋  | 36/47 [00:41<00:14,  1.32s/it]Evaluating MOT15:  79%|███████▊  | 37/47 [00:43<00:12,  1.28s/it]Evaluating MOT15:  81%|████████  | 38/47 [00:44<00:10,  1.19s/it]Evaluating MOT15:  83%|████████▎ | 39/47 [00:45<00:09,  1.18s/it]Evaluating MOT15:  85%|████████▌ | 40/47 [00:46<00:08,  1.18s/it]Evaluating MOT15:  87%|████████▋ | 41/47 [00:47<00:07,  1.18s/it]Evaluating MOT15:  89%|████████▉ | 42/47 [00:48<00:05,  1.19s/it]Evaluating MOT15:  91%|█████████▏| 43/47 [00:50<00:04,  1.19s/it]Evaluating MOT15:  94%|█████████▎| 44/47 [00:51<00:03,  1.18s/it]Evaluating MOT15:  96%|█████████▌| 45/47 [00:52<00:02,  1.20s/it]Evaluating MOT15:  98%|█████████▊| 46/47 [00:53<00:01,  1.20s/it]Evaluating MOT15: 100%|██████████| 47/47 [00:54<00:00,  1.22s/it]Evaluating MOT15: 100%|██████████| 47/47 [00:54<00:00,  1.17s/it]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 10, 128), got [1, 8, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 11, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 13, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 11, 128), got [1, 9, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 15, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 17, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 19, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 22, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 15, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 17, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 11: Expected hidden[0] size (1, 14, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 18, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 22: Expected hidden[0] size (1, 17, 128), got [1, 18, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 24, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 33: Expected hidden[0] size (1, 23, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 28, 128), got [1, 23, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 19, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 20, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 32: Expected hidden[0] size (1, 21, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 37: Expected hidden[0] size (1, 20, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 27, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 10: Expected hidden[0] size (1, 13, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 12: Expected hidden[0] size (1, 10, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 19, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 17: Expected hidden[0] size (1, 20, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 22: Expected hidden[0] size (1, 19, 128), got [1, 20, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 26, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 36: Expected hidden[0] size (1, 25, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 44: Expected hidden[0] size (1, 24, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 46: Expected hidden[0] size (1, 34, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 12: Expected hidden[0] size (1, 10, 128), got [1, 11, 128]
+   ⚠️ Model forward error at frame 14: Expected hidden[0] size (1, 8, 128), got [1, 10, 128]
+   ⚠️ Model forward error at frame 16: Expected hidden[0] size (1, 13, 128), got [1, 8, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 19, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 22, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 17, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 27: Expected hidden[0] size (1, 16, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 24, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 32: Expected hidden[0] size (1, 23, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 44: Expected hidden[0] size (1, 22, 128), got [1, 23, 128]
+   ⚠️ Model forward error at frame 46: Expected hidden[0] size (1, 27, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 16, 128), got [1, 14, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 18, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 42: Expected hidden[0] size (1, 17, 128), got [1, 18, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 22, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 47: Expected hidden[0] size (1, 20, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 16, 128), got [1, 12, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 22, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 26, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 18, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 23: Expected hidden[0] size (1, 17, 128), got [1, 18, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 24, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 32: Expected hidden[0] size (1, 23, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 35: Expected hidden[0] size (1, 22, 128), got [1, 23, 128]
+   ⚠️ Model forward error at frame 40: Expected hidden[0] size (1, 21, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 43: Expected hidden[0] size (1, 19, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 27, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 47: Expected hidden[0] size (1, 28, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 17, 128), got [1, 13, 128]
+   ⚠️ Model forward error at frame 24: Expected hidden[0] size (1, 16, 128), got [1, 17, 128]
+   ⚠️ Model forward error at frame 29: Expected hidden[0] size (1, 15, 128), got [1, 16, 128]
+   ⚠️ Model forward error at frame 31: Expected hidden[0] size (1, 22, 128), got [1, 15, 128]
+   ⚠️ Model forward error at frame 40: Expected hidden[0] size (1, 21, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 44: Expected hidden[0] size (1, 20, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 46: Expected hidden[0] size (1, 26, 128), got [1, 20, 128]
+
+📊 Results for MOT15:
+
+   I-frame Baseline:
+      Moving objects (690): mAP = 0.2428
+      Static objects (104): mAP = 0.4616
+
+   Mean-VC Baseline:
+      Moving objects (690): mAP = 0.4114
+      Static objects (104): mAP = 0.4455
+
+   MV Model:
+      Moving objects (690): mAP = 0.8393
+      Static objects (104): mAP = 0.9451
+
+================================================================================
+📊 Evaluating MOT20
+================================================================================
+
+📁 Loading MOT20 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot20']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT20 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 4 video sequences. Scanning GOP indices...
+         [1/4] MOT20-06_960x960_gop50_500fram... ✓ (10 GOPs)
+         [2/4] MOT20-07_960x960_gop50_500fram... ✓ (10 GOPs)
+         [3/4] MOT20-04_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/4] MOT20-08_960x960_gop50_500fram... ✓ (10 GOPs)
+      ✅ Scanned 4 sequences, found 40 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 40 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 40 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 40
+   ✅ Loaded 2400 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 40 static camera GOPs
+Evaluating MOT20:   0%|          | 0/40 [00:00<?, ?it/s]Evaluating MOT20:   2%|▎         | 1/40 [00:01<00:50,  1.31s/it]Evaluating MOT20:   5%|▌         | 2/40 [00:02<00:48,  1.28s/it]Evaluating MOT20:   8%|▊         | 3/40 [00:03<00:46,  1.25s/it]Evaluating MOT20:  10%|█         | 4/40 [00:05<00:46,  1.28s/it]Evaluating MOT20:  12%|█▎        | 5/40 [00:06<00:45,  1.29s/it]Evaluating MOT20:  15%|█▌        | 6/40 [00:07<00:44,  1.30s/it]Evaluating MOT20:  18%|█▊        | 7/40 [00:09<00:42,  1.30s/it]Evaluating MOT20:  20%|██        | 8/40 [00:10<00:41,  1.31s/it]Evaluating MOT20:  22%|██▎       | 9/40 [00:11<00:42,  1.39s/it]Evaluating MOT20:  25%|██▌       | 10/40 [00:13<00:40,  1.34s/it]Evaluating MOT20:  28%|██▊       | 11/40 [00:14<00:38,  1.31s/it]Evaluating MOT20:  30%|███       | 12/40 [00:15<00:36,  1.30s/it]Evaluating MOT20:  32%|███▎      | 13/40 [00:16<00:35,  1.30s/it]Evaluating MOT20:  35%|███▌      | 14/40 [00:18<00:34,  1.31s/it]Evaluating MOT20:  38%|███▊      | 15/40 [00:19<00:33,  1.32s/it]Evaluating MOT20:  40%|████      | 16/40 [00:20<00:31,  1.32s/it]Evaluating MOT20:  42%|████▎     | 17/40 [00:22<00:30,  1.32s/it]Evaluating MOT20:  45%|████▌     | 18/40 [00:23<00:29,  1.35s/it]Evaluating MOT20:  48%|████▊     | 19/40 [00:25<00:28,  1.35s/it]Evaluating MOT20:  50%|█████     | 20/40 [00:26<00:28,  1.40s/it]Evaluating MOT20:  52%|█████▎    | 21/40 [00:28<00:26,  1.42s/it]Evaluating MOT20:  55%|█████▌    | 22/40 [00:29<00:26,  1.47s/it]Evaluating MOT20:  57%|█████▊    | 23/40 [00:31<00:25,  1.50s/it]Traceback (most recent call last):
+  File "/home/aduche/Bureau/motion_sight_back_up/R-Yolov1/yolo-v3/Machine-Learning-Collection/ML/Pytorch/object_detection/YoloV11/yolov_11_compressed/MOTS-experiments/evaluate_three_methods_comparison.py", line 711, in main
+    mv_result = evaluate_mv_model(
+  File "/home/aduche/Bureau/motion_sight_back_up/R-Yolov1/yolo-v3/Machine-Learning-Collection/ML/Pytorch/object_detection/YoloV11/yolov_11_compressed/MOTS-experiments/evaluate_three_methods_comparison.py", line 384, in evaluate_mv_model
+    pred_static_mask = ~pred_moving_mask
+TypeError: ~ (operator.invert) is only implemented on integer and Boolean-type tensors
+Evaluating MOT20:  60%|██████    | 24/40 [00:32<00:22,  1.43s/it]Evaluating MOT20:  62%|██████▎   | 25/40 [00:33<00:21,  1.46s/it]Evaluating MOT20:  65%|██████▌   | 26/40 [00:35<00:21,  1.55s/it]Evaluating MOT20:  68%|██████▊   | 27/40 [00:37<00:20,  1.61s/it]Evaluating MOT20:  70%|███████   | 28/40 [00:39<00:19,  1.62s/it]   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 38, 128), got [1, 33, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 41, 128), got [1, 38, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 43, 128), got [1, 41, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 37, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 39, 128), got [1, 37, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 40, 128), got [1, 39, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 35, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 39, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 40, 128), got [1, 39, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 38, 128), got [1, 32, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 40, 128), got [1, 38, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 44, 128), got [1, 40, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 35, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 38, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 41, 128), got [1, 38, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 30, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 33, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 35, 128), got [1, 33, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 34, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 40, 128), got [1, 34, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 41, 128), got [1, 40, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 37, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 40, 128), got [1, 37, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 41, 128), got [1, 40, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 35, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 38, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 43, 128), got [1, 38, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 35, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 42, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 36, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 37, 128), got [1, 36, 128]
+   ⚠️ Model forward error at frame 47: Expected hidden[0] size (1, 36, 128), got [1, 37, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 33, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 35, 128), got [1, 33, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 27, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 28, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 33, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 29, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 31, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 30, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 31, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 34, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 31, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 28: Expected hidden[0] size (1, 30, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 32, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 37: Expected hidden[0] size (1, 31, 128), got [1, 32, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 37, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 29, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 30, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 33, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 29, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 30, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 31, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 25, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 28, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 31, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 24, 128), got [1, 22, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 25, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 27, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 41, 128), got [1, 34, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 51, 128), got [1, 41, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 54, 128), got [1, 51, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 44, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 49, 128), got [1, 44, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 52, 128), got [1, 49, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 44, 128), got [1, 37, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 51, 128), got [1, 44, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 55, 128), got [1, 51, 128]
+   ⚠️ Model forward error at frame 6: Expected hidden[0] size (1, 0, 128), got [1, 34, 128]
+   ⚠️ Error in MV model evaluation for GOP 23: ~ (operator.invert) is only implemented on integer and Boolean-type tensors
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 42, 128), got [1, 37, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 51, 128), got [1, 42, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 52, 128), got [1, 51, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 41, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 44, 128), got [1, 41, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 51, 128), got [1, 44, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 45, 128), got [1, 34, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 51, 128), got [1, 45, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 54, 128), got [1, 51, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 44, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 49, 128), got [1, 44, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 56, 128), got [1, 49, 128]
+   ⚠️ Model forward error at frame 6: Expected hidden[0] size (1, 0, 128), got [1, 40, 128]
+Traceback (most recent call last):
+  File "/home/aduche/Bureau/motion_sight_back_up/R-Yolov1/yolo-v3/Machine-Learning-Collection/ML/Pytorch/object_detection/YoloV11/yolov_11_compressed/MOTS-experiments/evaluate_three_methods_comparison.py", line 711, in main
+    mv_result = evaluate_mv_model(
+  File "/home/aduche/Bureau/motion_sight_back_up/R-Yolov1/yolo-v3/Machine-Learning-Collection/ML/Pytorch/object_detection/YoloV11/yolov_11_compressed/MOTS-experiments/evaluate_three_methods_comparison.py", line 384, in evaluate_mv_model
+    pred_static_mask = ~pred_moving_mask
+TypeError: ~ (operator.invert) is only implemented on integer and Boolean-type tensors
+Evaluating MOT20:  72%|███████▎  | 29/40 [00:40<00:16,  1.46s/it]Evaluating MOT20:  75%|███████▌  | 30/40 [00:41<00:14,  1.48s/it]Evaluating MOT20:  78%|███████▊  | 31/40 [00:43<00:12,  1.42s/it]Evaluating MOT20:  80%|████████  | 32/40 [00:44<00:11,  1.41s/it]Evaluating MOT20:  82%|████████▎ | 33/40 [00:45<00:09,  1.36s/it]Evaluating MOT20:  85%|████████▌ | 34/40 [00:47<00:08,  1.42s/it]Evaluating MOT20:  88%|████████▊ | 35/40 [00:48<00:06,  1.37s/it]Evaluating MOT20:  90%|█████████ | 36/40 [00:49<00:05,  1.33s/it]Evaluating MOT20:  92%|█████████▎| 37/40 [00:50<00:03,  1.31s/it]Evaluating MOT20:  95%|█████████▌| 38/40 [00:52<00:02,  1.38s/it]Evaluating MOT20:  98%|█████████▊| 39/40 [00:53<00:01,  1.36s/it]Evaluating MOT20: 100%|██████████| 40/40 [00:55<00:00,  1.34s/it]Evaluating MOT20: 100%|██████████| 40/40 [00:55<00:00,  1.38s/it]
+   ⚠️ Error in MV model evaluation for GOP 28: ~ (operator.invert) is only implemented on integer and Boolean-type tensors
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 51, 128), got [1, 41, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 54, 128), got [1, 51, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 61, 128), got [1, 54, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 26, 128), got [1, 19, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 30, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 33, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 26, 128), got [1, 23, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 31, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 32, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 27, 128), got [1, 23, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 30, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 35, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 27, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 28, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 30, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 27, 128), got [1, 21, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 31, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 34, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 27, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 30, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 31, 128), got [1, 30, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 29, 128), got [1, 24, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 31, 128), got [1, 29, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 34, 128), got [1, 25, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 35, 128), got [1, 34, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 38, 128), got [1, 35, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 31, 128), got [1, 27, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 34, 128), got [1, 31, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 35, 128), got [1, 34, 128]
+   ⚠️ Model forward error at frame 15: Expected hidden[0] size (1, 28, 128), got [1, 26, 128]
+   ⚠️ Model forward error at frame 30: Expected hidden[0] size (1, 33, 128), got [1, 28, 128]
+   ⚠️ Model forward error at frame 45: Expected hidden[0] size (1, 34, 128), got [1, 33, 128]
+
+📊 Results for MOT20:
+
+   I-frame Baseline:
+      Moving objects (1303): mAP = 0.3814
+      Static objects (365): mAP = 0.6272
+
+   Mean-VC Baseline:
+      Moving objects (1303): mAP = 0.6248
+      Static objects (365): mAP = 0.5955
+
+   MV Model:
+      Moving objects (1191): mAP = 0.9891
+      Static objects (320): mAP = 0.9728
+
+💾 Results saved to: results/three_method_comparison.json
+
+================================================================================
+📊 SUMMARY - THREE METHOD COMPARISON
+================================================================================
+
+Dataset    Method       Moving mAP   Static mAP   Moving N   Static N  
+--------------------------------------------------------------------------------
+MOT17      I-frame      0.4794       0.8850       404        187       
+           Mean-VC      0.7268       0.8606       404        187       
+           MV Model     0.9834       0.9947       404        187       
+--------------------------------------------------------------------------------
+MOT15      I-frame      0.2428       0.4616       690        104       
+           Mean-VC      0.4114       0.4455       690        104       
+           MV Model     0.8393       0.9451       690        104       
+--------------------------------------------------------------------------------
+MOT20      I-frame      0.3814       0.6272       1303       365       
+           Mean-VC      0.6248       0.5955       1303       365       
+           MV Model     0.9891       0.9728       1191       320       
+--------------------------------------------------------------------------------
+
+================================================================================
+💡 INTERPRETATION
+================================================================================
+
+Expected patterns:
+  • I-frame: HIGH static mAP, LOW moving mAP (assumes no motion)
+  • MV Model: HIGH moving mAP, GOOD static mAP (tracks motion)
+  • Mean-VC: MEDIUM both (interpolates between)
+
+
+Key Insights:
+  1. I-frame fails on moving objects → motion tracking is essential
+  2. MV model improves moving object detection significantly
+  3. MV model maintains good performance on static objects
+

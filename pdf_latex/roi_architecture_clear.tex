@@ -1,0 +1,292 @@
+
+\documentclass[border=8pt, multi, tikz]{standalone} 
+\usepackage{import}
+\subimport{../PlotNeuralNet/layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
+\def\FcColor{rgb:blue,5;red,2.5;white,5}
+\def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\SoftmaxColor{rgb:magenta,5;black,7}   
+\def\SumColor{rgb:blue,5;green,15}
+
+\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+\tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
+
+\pic[shift={(0,0,0)}] at (0,0,0) 
+    {Box={
+        name=boxes_prev,
+        caption=Boxes\\$(t\!-\!1)$\\$N{\times}4$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=12,
+        width=0.8,
+        depth=1
+        }
+    };
+
+\pic[shift={(0,-7,0)}] at (boxes_prev-east) 
+    {Box={
+        name=mv_frame,
+        caption=$MV_n^g$\\$60{\times}60{\times}2$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=18,
+        width=2,
+        depth=12
+        }
+    };
+
+\pic[shift={(0,7,0)}] at (boxes_prev-east) 
+    {Box={
+        name=dct_frame,
+        caption=$\mathcal{DCT}(\Delta Y_n^g)$\\$80{\times}80{\times}C$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.5,
+        depth=16
+        }
+    };
+
+\pic[shift={(5,0,0)}] at (mv_frame-east) 
+    {Box={
+        name=mv_roi,
+        caption=ROI Pool\\$N{\times}8{\times}8{\times}2$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=16,
+        width=2,
+        depth=10
+        }
+    };
+
+\draw [connection]  (mv_frame-east)    -- node {\midarrow} (mv_roi-west);
+
+% Boxes define ROI extraction regions (dashed = spatial guidance, not data)
+\draw[dashed, line width=2pt, color=purple!60] (boxes_prev-south) -- 
+    node[midway, right, font=\scriptsize, text=purple!80] {spatial} 
+    node[midway, right, font=\scriptsize, text=purple!80, yshift=-10pt] {regions} 
+    (mv_roi-west);
+
+\pic[shift={(2.5,0,0)}] at (mv_roi-east) 
+    {Box={
+        name=mv_stats,
+        caption=MV Stats\\$N{\times}64$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=14,
+        width=1.5,
+        depth=1
+        }
+    };
+
+\draw [connection]  (mv_roi-east)    -- node {\midarrow} (mv_stats-west);
+
+\pic[shift={(5,0,0)}] at (dct_frame-east) 
+    {Box={
+        name=dct_conv,
+        caption=Conv\\$80{\times}80{\times}32$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.5,
+        depth=16
+        }
+    };
+
+\draw [connection]  (dct_frame-east)    -- node {\midarrow} (dct_conv-west);
+
+\pic[shift={(2.5,0,0)}] at (dct_conv-east) 
+    {Box={
+        name=dct_roi,
+        caption=ROI Pool\\$N{\times}8{\times}8{\times}32$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=16,
+        width=2,
+        depth=10
+        }
+    };
+
+\draw [connection]  (dct_conv-east)    -- node {\midarrow} (dct_roi-west);
+
+% Boxes define DCT ROI regions
+\draw[dashed, line width=2pt, color=purple!60] (boxes_prev-north) -- 
+    node[midway, right, font=\scriptsize, text=purple!80] {spatial} 
+    node[midway, right, font=\scriptsize, text=purple!80, yshift=-10pt] {regions} 
+    (dct_roi-west);
+
+\pic[shift={(2.5,0,0)}] at (dct_roi-east) 
+    {Box={
+        name=dct_stats,
+        caption=DCT Stats\\$N{\times}32$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=14,
+        width=1.5,
+        depth=1
+        }
+    };
+
+\draw [connection]  (dct_roi-east)    -- node {\midarrow} (dct_stats-west);
+
+\pic[shift={(3,0,0)}] at (boxes_prev-east) 
+    {Box={
+        name=box_enc,
+        caption=Box Enc\\$N{\times}32$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=12,
+        width=1.5,
+        depth=1
+        }
+    };
+
+\draw [connection]  (boxes_prev-east)    -- node {\midarrow} (box_enc-west);
+
+\pic[shift={(16,0,0)}] at (0,0,0) 
+    {Box={
+        name=concat,
+        caption=Concat\\$N{\times}128$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=16,
+        width=2.5,
+        depth=14
+        }
+    };
+
+\draw [connection]  (mv_stats-east)    -- node {\midarrow} (concat-west);
+
+\draw [connection]  (dct_stats-east)    -- node {\midarrow} (concat-west);
+
+\draw [connection]  (box_enc-east)    -- node {\midarrow} (concat-west);
+
+\pic[shift={(3,0,0)}] at (concat-east) 
+    {Box={
+        name=lstm,
+        caption=BiLSTM\\$N{\times}128$,
+        xlabel={{" ","dummy"}},
+        zlabel=,
+        fill=\SoftmaxColor,
+        opacity=0.8,
+        height=16,
+        width=3,
+        depth=14
+        }
+    };
+
+\draw [connection]  (concat-east)    -- node {\midarrow} (lstm-west);
+
+\pic[shift={(3,2,0)}] at (lstm-east) 
+    {Box={
+        name=pos_delta,
+        caption=$\Delta$pos\\$N{\times}2$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=12,
+        width=1.5,
+        depth=1
+        }
+    };
+
+\draw [connection]  (lstm-east)    -- node {\midarrow} (pos_delta-west);
+
+\pic[shift={(0,-4,0)}] at (pos_delta-east) 
+    {Box={
+        name=size_delta,
+        caption=$\Delta$size\\$N{\times}2$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=12,
+        width=1.5,
+        depth=1
+        }
+    };
+
+\draw [connection]  (lstm-east)    -- node {\midarrow} (size_delta-west);
+
+\pic[shift={(3,-1,0)}] at (pos_delta-east) 
+    {Box={
+        name=boxes_out,
+        caption=Boxes\\$(t)$\\$N{\times}4$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=12,
+        width=0.8,
+        depth=1
+        }
+    };
+
+\draw [connection]  (pos_delta-east)    -- node {\midarrow} (boxes_out-west);
+
+\draw [connection]  (size_delta-east)    -- node {\midarrow} (boxes_out-west);
+
+% Group overlay: Inputs
+\begin{scope}[on background layer]
+\fill[purple!8, rounded corners=15pt] 
+    ($(mv_frame-nearsouthwest) + (-2.5, -4.5, -3.0)$) rectangle 
+    ($(dct_frame-nearnortheast) + (2.5, 4.5, 3.0)$);
+\draw[purple!70!black, line width=3pt, rounded corners=15pt] 
+    ($(mv_frame-nearsouthwest) + (-2.5, -4.5, -3.0)$) rectangle 
+    ($(dct_frame-nearnortheast) + (2.5, 4.5, 3.0)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\Large, text=purple!90!black, fill=purple!15, inner sep=5pt, rounded corners=5pt, draw=purple!70!black, line width=2pt] at 
+    ($(dct_frame-nearnortheast) + (-2.2, 3.3, 0)$) {Inputs};
+\node[anchor=north west, font=\normalsize, text=purple!90!black, fill=purple!15, inner sep=4pt, rounded corners=4pt, draw=purple!50!black, line width=1pt] at 
+    ($(dct_frame-nearnortheast) + (-2.2, 2.0, 0)$) {Frame $(t)$ + Boxes $(t\!-\!1)$};
+
+% Group overlay: ROI Extraction
+\begin{scope}[on background layer]
+\fill[blue!8, rounded corners=15pt] 
+    ($(mv_roi-nearsouthwest) + (-2.5, -5.0, -3.5)$) rectangle 
+    ($(dct_stats-nearnortheast) + (2.5, 5.0, 3.5)$);
+\draw[blue!70!black, line width=3pt, rounded corners=15pt] 
+    ($(mv_roi-nearsouthwest) + (-2.5, -5.0, -3.5)$) rectangle 
+    ($(dct_stats-nearnortheast) + (2.5, 5.0, 3.5)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\Large, text=blue!90!black, fill=blue!15, inner sep=5pt, rounded corners=5pt, draw=blue!70!black, line width=2pt] at 
+    ($(dct_stats-nearnortheast) + (-2.2, 3.8, 0)$) {ROI Extraction};
+\node[anchor=north west, font=\normalsize, text=blue!90!black, fill=blue!15, inner sep=4pt, rounded corners=4pt, draw=blue!50!black, line width=1pt] at 
+    ($(dct_stats-nearnortheast) + (-2.2, 2.5, 0)$) {32K params};
+
+% Group overlay: Fusion \& Temporal
+\begin{scope}[on background layer]
+\fill[orange!8, rounded corners=15pt] 
+    ($(concat-nearsouthwest) + (-3.0, -5.0, -4.0)$) rectangle 
+    ($(boxes_out-nearnortheast) + (3.0, 5.0, 4.0)$);
+\draw[orange!70!black, line width=3pt, rounded corners=15pt] 
+    ($(concat-nearsouthwest) + (-3.0, -5.0, -4.0)$) rectangle 
+    ($(boxes_out-nearnortheast) + (3.0, 5.0, 4.0)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\Large, text=orange!90!black, fill=orange!15, inner sep=5pt, rounded corners=5pt, draw=orange!70!black, line width=2pt] at 
+    ($(boxes_out-nearnortheast) + (-2.7, 3.8, 0)$) {Fusion \& Temporal};
+\node[anchor=north west, font=\normalsize, text=orange!90!black, fill=orange!15, inner sep=4pt, rounded corners=4pt, draw=orange!50!black, line width=1pt] at 
+    ($(boxes_out-nearnortheast) + (-2.7, 2.5, 0)$) {196K params};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,125 @@
+========================================
+Three-Method Comparison
+========================================
+
+✅ Dataset factory imported successfully
+🖥️  Using device: cuda
+
+📦 Loading MV model from: experiments/ablation_fast/mv_only/best_model.pt
+🧠 Creating MV-Center V1 model...
+   ⚡ Using FAST DCT-MV model (no ROI, no attention)
+      - DCT residuals: 0 coefficients
+      - Motion vectors: enabled
+      - Architecture: Global pooling + Simple LSTM
+      - Expected speedup: ~2-3x faster than standard model
+      🔬 Ablation config: mv_channels=2, dct_channels=0
+   🎯 Using DETR-style detection loss:
+      - Hungarian matching for optimal object assignment
+      - Focal Loss (α=0.25, γ=2.0)
+      - Box weight: 5.0, GIoU weight: 2.0
+      - Class weight: 2.0, No-object weight: 0.1
+   ✅ Model loaded successfully
+   📊 Model config: version=v1, use_mv_only=False
+
+================================================================================
+🔬 THREE-METHOD COMPARISON: Mean-VC vs I-frame vs MV Model
+================================================================================
+📊 Motion threshold: 0.01 (normalized)
+📊 IoU threshold: 0.5
+
+
+================================================================================
+📊 Evaluating MOT17
+================================================================================
+
+📁 Loading MOT17 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot17']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT17 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 7 video sequences. Scanning GOP indices...
+         [1/7] MOT17-01-SDP_960x960_gop50_500... ✓ (9 GOPs)
+         [2/7] MOT17-07-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [3/7] MOT17-03-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [4/7] MOT17-06-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [5/7] MOT17-08-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [6/7] MOT17-12-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [7/7] MOT17-14-SDP_960x960_gop50_500... ✓ (10 GOPs)
+      ✅ Scanned 7 sequences, found 69 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 69 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 69 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 69
+   ✅ Loaded 4140 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 19 static camera GOPs
+Evaluating MOT17:   0%|          | 0/19 [00:00<?, ?it/s]Evaluating MOT17:   5%|▌         | 1/19 [00:01<00:24,  1.35s/it]Evaluating MOT17:  11%|█         | 2/19 [00:02<00:20,  1.23s/it]Evaluating MOT17:  16%|█▌        | 3/19 [00:03<00:19,  1.19s/it]Evaluating MOT17:  21%|██        | 4/19 [00:04<00:17,  1.18s/it]Evaluating MOT17:  26%|██▋       | 5/19 [00:05<00:16,  1.16s/it]Evaluating MOT17:  32%|███▏      | 6/19 [00:07<00:14,  1.14s/it]Evaluating MOT17:  37%|███▋      | 7/19 [00:08<00:13,  1.14s/it]Evaluating MOT17:  42%|████▏     | 8/19 [00:09<00:12,  1.15s/it]Evaluating MOT17:  47%|████▋     | 9/19 [00:10<00:11,  1.14s/it]Evaluating MOT17:  53%|█████▎    | 10/19 [00:11<00:11,  1.25s/it]Evaluating MOT17:  58%|█████▊    | 11/19 [00:13<00:09,  1.22s/it]Evaluating MOT17:  63%|██████▎   | 12/19 [00:14<00:08,  1.22s/it]Evaluating MOT17:  68%|██████▊   | 13/19 [00:15<00:07,  1.21s/it]Evaluating MOT17:  74%|███████▎  | 14/19 [00:16<00:05,  1.20s/it]Evaluating MOT17:  79%|███████▉  | 15/19 [00:17<00:04,  1.20s/it]Evaluating MOT17:  84%|████████▍ | 16/19 [00:19<00:03,  1.21s/it]Evaluating MOT17:  89%|████████▉ | 17/19 [00:20<00:02,  1.21s/it]Evaluating MOT17:  95%|█████████▍| 18/19 [00:21<00:01,  1.21s/it]Evaluating MOT17: 100%|██████████| 19/19 [00:22<00:00,  1.21s/it]Evaluating MOT17: 100%|██████████| 19/19 [00:22<00:00,  1.20s/it]
+
+📊 Results for MOT17:
+
+   I-frame Baseline:
+      Moving objects (404): mAP = 0.4794
+      Static objects (187): mAP = 0.8850
+
+   Mean-VC Baseline:
+      Moving objects (404): mAP = 0.7268
+      Static objects (187): mAP = 0.8606
+
+   MV Model:
+      Moving objects (404): mAP = 0.4202
+      Static objects (187): mAP = 0.8646
+
+================================================================================
+📊 Evaluating MOT15
+================================================================================
+
+📁 Loading MOT15 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot15']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT15 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 11 video sequences. Scanning GOP indices...
+         [1/11] ADL-Rundle-3_960x960_gop50_500... ✓ (10 GOPs)
+         [2/11] ETH-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [3/11] KITTI-19_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/11] ADL-Rundle-1_960x960_gop50_500... ✓ (10 GOPs)
+         [5/11] TUD-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [6/11] KITTI-16_960x960_gop50_500fram... ✓ (5 GOPs)
+         [7/11] Venice-1_960x960_gop50_500fram... ✓ (9 GOPs)
+         [8/11] PETS09-S2L2_960x960_gop50_500f... ✓ (9 GOPs)
+         [9/11] AVG-TownCentre_960x960_gop50_5... ✓ (9 GOPs)
+         [10/11] ETH-Jelmoli_960x960_gop50_500f... ✓ (9 GOPs)
+         [11/11] ETH-Linthescher_960x960_gop50_... ✓ (10 GOPs)
+      ✅ Scanned 11 sequences, found 91 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 91 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 91 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 91
+   ✅ Loaded 5460 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 47 static camera GOPs
+Evaluating MOT15:   0%|          | 0/47 [00:00<?, ?it/s]Evaluating MOT15:   2%|▏         | 1/47 [00:01<00:51,  1.12s/it]Evaluating MOT15:   4%|▍         | 2/47 [00:02<00:51,  1.15s/it]Evaluating MOT15:   6%|▋         | 3/47 [00:03<00:49,  1.13s/it]Evaluating MOT15:   9%|▊         | 4/47 [00:04<00:47,  1.11s/it]Evaluating MOT15:  11%|█         | 5/47 [00:05<00:46,  1.12s/it]Evaluating MOT15:  13%|█▎        | 6/47 [00:06<00:46,  1.14s/it]Evaluating MOT15:  15%|█▍        | 7/47 [00:08<00:48,  1.22s/it]Evaluating MOT15:  17%|█▋        | 8/47 [00:09<00:48,  1.25s/it]Evaluating MOT15:  19%|█▉        | 9/47 [00:10<00:48,  1.27s/it]Evaluating MOT15:  21%|██▏       | 10/47 [00:12<00:48,  1.30s/it]Evaluating MOT15:  23%|██▎       | 11/47 [00:13<00:45,  1.27s/it]Evaluating MOT15:  26%|██▌       | 12/47 [00:14<00:43,  1.23s/it]Evaluating MOT15:  28%|██▊       | 13/47 [00:15<00:40,  1.20s/it]Evaluating MOT15:  30%|██▉       | 14/47 [00:16<00:33,  1.02s/it]

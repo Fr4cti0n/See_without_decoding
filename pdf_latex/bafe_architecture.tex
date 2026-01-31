@@ -1,0 +1,167 @@
+
+\documentclass[border=8pt, multi, tikz]{standalone} 
+\usepackage{import}
+\subimport{../PlotNeuralNet/layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+\usepackage{amsmath}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{decorations.pathreplacing}
+
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
+\def\FcColor{rgb:blue,5;red,2.5;white,5}
+\def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\SoftmaxColor{rgb:magenta,5;black,7}   
+\def\SumColor{rgb:blue,5;green,15}
+
+\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+\tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
+\coordinate (dct_frame) at (2,6,0);\coordinate (mv_frame) at (2,0,0);\coordinate (boxes_prev) at (2,-6,0);
+\draw[decorate, decoration={brace, amplitude=15pt, raise=5pt}, line width=2pt, black!100] 
+    ($(-0.2,-1.2,0) + (-1.8,0,0)$) -- ($(-0.2,6.9,0) + (-1.8,0,0)$) 
+    node[midway, left=20pt, font=\LARGE, align=center, text=black] {P-Frame\\[1pt]$f_n^g$};
+\node[anchor=east, font=\LARGE, align=right, text=black] at ($(2,0,0) + (-0.3,0,0)$) {$MV_n^g$\\[1pt]$60{\times}60{\times}2$};
+\pic[shift={(3.5,0,0)}] at (1.5,0,0) 
+    {Box={
+        name=mv_roi,
+        caption=\Large BAFE-MV\\[2pt]$N{\times}15{\times}15{\times}2$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=13,
+        width=1.8,
+        depth=8
+        }
+    };
+\draw [connection] (mv_frame) -- (mv_roi-west);\coordinate (mv_stats) at ($(mv_roi-east) + (6.2,0,0)$);\draw [connection] (mv_roi-east) -- node[below=2pt, font=\LARGE, align=center, text=black] {MV A-Features\\[1pt]$N{\times}128$} (mv_stats);\node[anchor=east, font=\LARGE, align=right, text=black] at ($(2,6,0) + (-0.3,0,0)$) {$R_n^g$\\[1pt]$120{\times}120{\times}64$};
+\pic[shift={(2,0,0)}] at (1.75,6,0) 
+    {Box={
+        name=dct_conv,
+        caption=\Large Conv $1{\times}1$ \\[2pt],
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=13,
+        width=2,
+        depth=12
+        }
+    };
+\draw [connection] (dct_frame) -- (dct_conv-west);
+\pic[shift={(7,0,0)}] at (dct_conv-east) 
+    {Box={
+        name=dct_roi,
+        caption=\Large BAFE-DCT\\[2pt]$N{\times}30{\times}30{\times}32$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=13,
+        width=1.8,
+        depth=8
+        }
+    };
+\draw [connection] (dct_conv-east) -- node[below=2pt, font=\LARGE, align=center, text=black] {Encoded DCT\\[1pt]$120{\times}120{\times}32$} (dct_roi-west);\coordinate (dct_stats) at ($(dct_roi-east) + (6.2,0,0)$);\draw [connection] (dct_roi-east) -- node[below=2pt, font=\LARGE, align=center, text=black] {DCT A-Features\\[1pt]$N{\times}128$} (dct_stats);\node[anchor=east, font=\LARGE, align=right, text=black] at ($(2,-6,0) + (-0.3,0,0)$) {$bb(n{-}1)$\\[1pt]$N{\times}5$};
+\pic[shift={(3.5,0,0)}] at (3.7,-6,0) 
+    {Box={
+        name=box_enc,
+        caption=\Large MLP\\[2pt]$5{\rightarrow}32$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=10,
+        width=1.8,
+        depth=1
+        }
+    };
+\draw [connection] (boxes_prev) -- (box_enc-west);
+\pic[shift={(1.5,-10.0,0)}] at ($(dct_stats) + (1.5,0,0)$) 
+    {Box={
+        name=concat,
+        caption=\Large Concat\\$N{\times}288$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=13,
+        width=2,
+        depth=11
+        }
+    };
+\draw [connection] (mv_stats) -- ++(1.5,0) |- (concat-west);\draw [connection] (dct_stats) -- ++(1.5,0) |- (concat-west);\draw [connection] (box_enc-east) -- node[above=2pt, font=\LARGE, align=center, text=black] {Encoded Boxes\\[1pt]$N{\times}32$} ++(5.5,0) |- (concat-west);
+\pic[shift={(2.0,0,0)}] at (concat-east) 
+    {Box={
+        name=lstm,
+        caption=\Large BiLSTM\\$N{\times}128$,
+        xlabel={{" ","dummy"}},
+        zlabel=,
+        fill=\SoftmaxColor,
+        opacity=0.8,
+        height=13,
+        width=2.5,
+        depth=11
+        }
+    };
+
+\draw [connection]  (concat-east)    -- node {\midarrow} (lstm-west);
+\coordinate (refinement) at ($(lstm-east) + (5.5,0,0)$);\draw [connection] (lstm-east) -- node[below=2pt, font=\LARGE, align=center, text=black] {Refinements\\[1pt]$N{\times}5$} (refinement);
+\pic[shift={(0,0,0)}] at (refinement) 
+    {Box={
+        name=boxes_out,
+        caption=\Large ABoxes \\$bb(n)$\\$N{\times}5$,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=10,
+        width=0.8,
+        depth=1
+        }
+    };
+\draw [connection] (refinement) -- (boxes_out-west);\draw[-Stealth, brown!65!black, line width=2.5pt, dashed, opacity=0.8] (boxes_out-east) -- ++(2,0) |- ++(0,-5) -| (boxes_prev);
+% Input Stage overlay (using coordinates)
+\begin{scope}[on background layer]
+\fill[blue!10, rounded corners=15pt] 
+    ($(0,-6,0) + (-6.5, -5.0, -2.5)$) rectangle 
+    ($(1,6,0) + (2.5, 5.0, 2.5)$);
+\draw[blue!65!black, line width=3pt, rounded corners=15pt] 
+    ($(0,-6,0) + (-6.5, -5.0, -2.5)$) rectangle 
+    ($(1,6,0) + (2.5, 5.0, 2.5)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\LARGE, text=blue!80!black, fill=blue!12, inner sep=5pt, rounded corners=5pt, draw=blue!65!black, line width=2pt] at 
+    ($(-1.5,7,0) + (-1.0, 2.8, 0)$) {Inputs};
+
+% BAFE Extraction overlay (lightened for clarity)
+\begin{scope}[on background layer]
+\fill[green!10, rounded corners=15pt] 
+    ($(mv_roi-nearsouthwest) + (-3, -9.5, -2.8)$) rectangle 
+    ($(dct_roi-nearnortheast) + (9.5, 4.0, 2.8)$);
+\draw[green!65!black, line width=3pt, rounded corners=15pt] 
+    ($(mv_roi-nearsouthwest) + (-3, -9.5, -2.8)$) rectangle 
+    ($(dct_roi-nearnortheast) + (9.5, 4.0, 2.8)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\LARGE, text=green!70!black, fill=green!12, inner sep=5pt, rounded corners=5pt, draw=green!65!black, line width=2pt] at 
+    ($(dct_roi-nearnortheast) + (-5.5, 2.8, 0)$) {BAFE Extraction};
+\node[anchor=north west, font=\large, text=green!70!black, fill=green!12, inner sep=4pt, rounded corners=4pt, draw=green!60!black, line width=1pt] at 
+    ($(dct_roi-nearnortheast) + (-5.5, 1.5, 0)$) {~70K params};
+
+% Fusion & Temporal overlay
+\begin{scope}[on background layer]
+\fill[purple!8, rounded corners=15pt] 
+    ($(concat-nearsouthwest) + (-1.7, -5.5, -3.2)$) rectangle 
+    ($(boxes_out-nearnortheast) + (4.0, 14.1, 3.2)$);
+\draw[purple!70!black, line width=3pt, rounded corners=15pt] 
+    ($(concat-nearsouthwest) + (-1.7, -5.5, -3.2)$) rectangle 
+    ($(boxes_out-nearnortheast) + (4.0, 14.1, 3.2)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\LARGE, text=purple!90!black, fill=purple!15, inner sep=5pt, rounded corners=5pt, draw=purple!70!black, line width=2pt] at 
+    ($(concat-nearnortheast) + (0, 12.8, 0)$) {Fusion \& Temporal};
+\node[anchor=north west, font=\large, text=purple!90!black, fill=purple!15, inner sep=4pt, rounded corners=4pt, draw=purple!50!black, line width=1pt] at 
+    ($(concat-nearnortheast) + (0, 11.5, 0)$) {~160K params (BiLSTM + heads)};
+
+\end{tikzpicture}
+\end{document}

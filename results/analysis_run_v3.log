@@ -1,0 +1,194 @@
+================================
+Moving Objects Analysis
+================================
+
+✅ Dataset factory imported successfully
+🖥️  Using device: cuda
+
+🔍 Running ANALYSIS-ONLY mode (identifying moving objects)
+   To run full evaluation with model inference, use --no-analysis_only
+
+
+================================================================================
+🎯 EVALUATING MV MODEL ON MOVING OBJECTS ONLY (STATIC CAMERAS)
+================================================================================
+📊 Motion threshold: 10.0 pixels
+📊 IoU threshold: 0.5
+
+
+================================================================================
+📊 Evaluating MOT17
+================================================================================
+
+📁 Loading MOT17 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot17']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT17 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 7 video sequences. Scanning GOP indices...
+         [1/7] MOT17-01-SDP_960x960_gop50_500... ✓ (9 GOPs)
+         [2/7] MOT17-07-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [3/7] MOT17-03-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [4/7] MOT17-06-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [5/7] MOT17-08-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [6/7] MOT17-12-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [7/7] MOT17-14-SDP_960x960_gop50_500... ✓ (10 GOPs)
+      ✅ Scanned 7 sequences, found 69 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 69 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 69 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 69
+   ✅ Loaded 4140 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 19 static camera GOPs
+
+🔍 Analyzing object motion...
+Analyzing GOPs:   0%|          | 0/19 [00:00<?, ?it/s]Analyzing GOPs:   5%|▌         | 1/19 [00:00<00:04,  4.34it/s]Analyzing GOPs:  11%|█         | 2/19 [00:00<00:03,  4.41it/s]Analyzing GOPs:  16%|█▌        | 3/19 [00:00<00:03,  4.40it/s]Analyzing GOPs:  21%|██        | 4/19 [00:00<00:03,  4.41it/s]Analyzing GOPs:  26%|██▋       | 5/19 [00:01<00:03,  4.41it/s]Analyzing GOPs:  32%|███▏      | 6/19 [00:01<00:02,  4.41it/s]Analyzing GOPs:  37%|███▋      | 7/19 [00:01<00:02,  4.39it/s]Analyzing GOPs:  42%|████▏     | 8/19 [00:01<00:02,  4.40it/s]Analyzing GOPs:  47%|████▋     | 9/19 [00:02<00:02,  4.41it/s]Analyzing GOPs:  53%|█████▎    | 10/19 [00:02<00:02,  4.25it/s]Analyzing GOPs:  58%|█████▊    | 11/19 [00:02<00:01,  4.28it/s]Analyzing GOPs:  63%|██████▎   | 12/19 [00:02<00:01,  4.30it/s]Analyzing GOPs:  68%|██████▊   | 13/19 [00:02<00:01,  4.31it/s]Analyzing GOPs:  74%|███████▎  | 14/19 [00:03<00:01,  4.30it/s]Analyzing GOPs:  79%|███████▉  | 15/19 [00:03<00:00,  4.30it/s]Analyzing GOPs:  84%|████████▍ | 16/19 [00:03<00:00,  4.31it/s]Analyzing GOPs:  89%|████████▉ | 17/19 [00:03<00:00,  4.29it/s]Analyzing GOPs:  95%|█████████▍| 18/19 [00:04<00:00,  4.28it/s]Analyzing GOPs: 100%|██████████| 19/19 [00:04<00:00,  4.21it/s]Analyzing GOPs: 100%|██████████| 19/19 [00:04<00:00,  4.32it/s]
+
+📊 Motion Analysis:
+   Total GOPs: 19
+   GOPs with moving objects: 0
+   Total objects: 591
+   Moving objects: 0 (0.0%)
+   Static objects: 591 (100.0%)
+
+================================================================================
+📊 Evaluating MOT15
+================================================================================
+
+📁 Loading MOT15 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot15']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT15 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 11 video sequences. Scanning GOP indices...
+         [1/11] ADL-Rundle-3_960x960_gop50_500... ✓ (10 GOPs)
+         [2/11] ETH-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [3/11] KITTI-19_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/11] ADL-Rundle-1_960x960_gop50_500... ✓ (10 GOPs)
+         [5/11] TUD-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [6/11] KITTI-16_960x960_gop50_500fram... ✓ (5 GOPs)
+         [7/11] Venice-1_960x960_gop50_500fram... ✓ (9 GOPs)
+         [8/11] PETS09-S2L2_960x960_gop50_500f... ✓ (9 GOPs)
+         [9/11] AVG-TownCentre_960x960_gop50_5... ✓ (9 GOPs)
+         [10/11] ETH-Jelmoli_960x960_gop50_500f... ✓ (9 GOPs)
+         [11/11] ETH-Linthescher_960x960_gop50_... ✓ (10 GOPs)
+      ✅ Scanned 11 sequences, found 91 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 91 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 91 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 91
+   ✅ Loaded 5460 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 47 static camera GOPs
+
+🔍 Analyzing object motion...
+Analyzing GOPs:   0%|          | 0/47 [00:00<?, ?it/s]Analyzing GOPs:   2%|▏         | 1/47 [00:00<00:10,  4.29it/s]Analyzing GOPs:   4%|▍         | 2/47 [00:00<00:10,  4.32it/s]Analyzing GOPs:   6%|▋         | 3/47 [00:00<00:10,  4.33it/s]Analyzing GOPs:   9%|▊         | 4/47 [00:00<00:09,  4.34it/s]Analyzing GOPs:  11%|█         | 5/47 [00:01<00:10,  4.05it/s]Analyzing GOPs:  13%|█▎        | 6/47 [00:01<00:09,  4.15it/s]Analyzing GOPs:  15%|█▍        | 7/47 [00:01<00:09,  4.28it/s]Analyzing GOPs:  17%|█▋        | 8/47 [00:01<00:09,  4.29it/s]Analyzing GOPs:  19%|█▉        | 9/47 [00:02<00:08,  4.29it/s]Analyzing GOPs:  21%|██▏       | 10/47 [00:02<00:08,  4.32it/s]Analyzing GOPs:  23%|██▎       | 11/47 [00:02<00:08,  4.22it/s]Analyzing GOPs:  26%|██▌       | 12/47 [00:02<00:08,  4.15it/s]Analyzing GOPs:  28%|██▊       | 13/47 [00:03<00:08,  4.17it/s]Analyzing GOPs:  30%|██▉       | 14/47 [00:03<00:07,  4.39it/s]Analyzing GOPs:  34%|███▍      | 16/47 [00:03<00:05,  5.73it/s]Analyzing GOPs:  36%|███▌      | 17/47 [00:03<00:05,  5.45it/s]Analyzing GOPs:  38%|███▊      | 18/47 [00:03<00:05,  5.19it/s]Analyzing GOPs:  40%|████      | 19/47 [00:04<00:05,  5.02it/s]Analyzing GOPs:  45%|████▍     | 21/47 [00:04<00:04,  5.75it/s]Analyzing GOPs:  47%|████▋     | 22/47 [00:04<00:04,  5.37it/s]Analyzing GOPs:  49%|████▉     | 23/47 [00:04<00:04,  5.09it/s]Analyzing GOPs:  51%|█████     | 24/47 [00:05<00:04,  4.94it/s]Analyzing GOPs:  53%|█████▎    | 25/47 [00:05<00:04,  4.80it/s]Analyzing GOPs:  55%|█████▌    | 26/47 [00:05<00:04,  4.59it/s]Analyzing GOPs:  57%|█████▋    | 27/47 [00:05<00:04,  4.57it/s]Analyzing GOPs:  60%|█████▉    | 28/47 [00:06<00:04,  4.54it/s]Analyzing GOPs:  62%|██████▏   | 29/47 [00:06<00:03,  4.53it/s]Analyzing GOPs:  64%|██████▍   | 30/47 [00:06<00:03,  4.48it/s]Analyzing GOPs:  66%|██████▌   | 31/47 [00:06<00:03,  4.40it/s]Analyzing GOPs:  68%|██████▊   | 32/47 [00:06<00:03,  4.33it/s]Analyzing GOPs:  70%|███████   | 33/47 [00:07<00:03,  4.32it/s]Analyzing GOPs:  72%|███████▏  | 34/47 [00:07<00:03,  4.32it/s]Analyzing GOPs:  74%|███████▍  | 35/47 [00:07<00:02,  4.33it/s]Analyzing GOPs:  77%|███████▋  | 36/47 [00:07<00:02,  4.34it/s]Analyzing GOPs:  79%|███████▊  | 37/47 [00:08<00:02,  4.31it/s]Analyzing GOPs:  81%|████████  | 38/47 [00:08<00:01,  4.65it/s]Analyzing GOPs:  83%|████████▎ | 39/47 [00:08<00:01,  4.52it/s]Analyzing GOPs:  85%|████████▌ | 40/47 [00:08<00:01,  4.45it/s]Analyzing GOPs:  87%|████████▋ | 41/47 [00:08<00:01,  4.39it/s]Analyzing GOPs:  89%|████████▉ | 42/47 [00:09<00:01,  4.36it/s]Analyzing GOPs:  91%|█████████▏| 43/47 [00:09<00:00,  4.28it/s]Analyzing GOPs:  94%|█████████▎| 44/47 [00:09<00:00,  4.31it/s]Analyzing GOPs:  96%|█████████▌| 45/47 [00:09<00:00,  4.26it/s]Analyzing GOPs:  98%|█████████▊| 46/47 [00:10<00:00,  4.28it/s]Analyzing GOPs: 100%|██████████| 47/47 [00:10<00:00,  4.28it/s]Analyzing GOPs: 100%|██████████| 47/47 [00:10<00:00,  4.52it/s]
+
+📊 Motion Analysis:
+   Total GOPs: 47
+   GOPs with moving objects: 0
+   Total objects: 794
+   Moving objects: 0 (0.0%)
+   Static objects: 794 (100.0%)
+
+================================================================================
+📊 Evaluating MOT20
+================================================================================
+
+📁 Loading MOT20 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot20']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT20 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 4 video sequences. Scanning GOP indices...
+         [1/4] MOT20-06_960x960_gop50_500fram... ✓ (10 GOPs)
+         [2/4] MOT20-07_960x960_gop50_500fram... ✓ (10 GOPs)
+         [3/4] MOT20-04_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/4] MOT20-08_960x960_gop50_500fram... ✓ (10 GOPs)
+      ✅ Scanned 4 sequences, found 40 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 40 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 40 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 40
+   ✅ Loaded 2400 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 40 static camera GOPs
+
+🔍 Analyzing object motion...
+Analyzing GOPs:   0%|          | 0/40 [00:00<?, ?it/s]Analyzing GOPs:   2%|▎         | 1/40 [00:00<00:09,  4.21it/s]Analyzing GOPs:   5%|▌         | 2/40 [00:00<00:08,  4.26it/s]Analyzing GOPs:   8%|▊         | 3/40 [00:00<00:08,  4.27it/s]Analyzing GOPs:  10%|█         | 4/40 [00:00<00:08,  4.27it/s]Analyzing GOPs:  12%|█▎        | 5/40 [00:01<00:08,  4.28it/s]Analyzing GOPs:  15%|█▌        | 6/40 [00:01<00:07,  4.31it/s]Analyzing GOPs:  18%|█▊        | 7/40 [00:01<00:07,  4.33it/s]Analyzing GOPs:  20%|██        | 8/40 [00:01<00:07,  4.33it/s]Analyzing GOPs:  22%|██▎       | 9/40 [00:02<00:07,  4.32it/s]Analyzing GOPs:  25%|██▌       | 10/40 [00:02<00:06,  4.33it/s]Analyzing GOPs:  28%|██▊       | 11/40 [00:02<00:06,  4.29it/s]Analyzing GOPs:  30%|███       | 12/40 [00:02<00:06,  4.28it/s]Analyzing GOPs:  32%|███▎      | 13/40 [00:03<00:06,  4.26it/s]Analyzing GOPs:  35%|███▌      | 14/40 [00:03<00:06,  4.27it/s]Analyzing GOPs:  38%|███▊      | 15/40 [00:03<00:05,  4.27it/s]Analyzing GOPs:  40%|████      | 16/40 [00:03<00:05,  4.27it/s]Analyzing GOPs:  42%|████▎     | 17/40 [00:03<00:05,  4.24it/s]Analyzing GOPs:  45%|████▌     | 18/40 [00:04<00:05,  4.25it/s]Analyzing GOPs:  48%|████▊     | 19/40 [00:04<00:04,  4.29it/s]Analyzing GOPs:  50%|█████     | 20/40 [00:04<00:04,  4.32it/s]Analyzing GOPs:  52%|█████▎    | 21/40 [00:04<00:04,  4.14it/s]Analyzing GOPs:  55%|█████▌    | 22/40 [00:05<00:04,  4.04it/s]Analyzing GOPs:  57%|█████▊    | 23/40 [00:05<00:04,  3.99it/s]Analyzing GOPs:  60%|██████    | 24/40 [00:05<00:04,  3.97it/s]Analyzing GOPs:  62%|██████▎   | 25/40 [00:05<00:03,  3.93it/s]Analyzing GOPs:  65%|██████▌   | 26/40 [00:06<00:03,  3.91it/s]Analyzing GOPs:  68%|██████▊   | 27/40 [00:06<00:03,  3.88it/s]Analyzing GOPs:  70%|███████   | 28/40 [00:06<00:03,  3.86it/s]Analyzing GOPs:  72%|███████▎  | 29/40 [00:07<00:02,  3.88it/s]Analyzing GOPs:  75%|███████▌  | 30/40 [00:07<00:02,  3.86it/s]Analyzing GOPs:  78%|███████▊  | 31/40 [00:07<00:02,  4.02it/s]Analyzing GOPs:  80%|████████  | 32/40 [00:07<00:01,  4.14it/s]Analyzing GOPs:  82%|████████▎ | 33/40 [00:07<00:01,  4.22it/s]Analyzing GOPs:  85%|████████▌ | 34/40 [00:08<00:01,  4.27it/s]Analyzing GOPs:  88%|████████▊ | 35/40 [00:08<00:01,  4.32it/s]Analyzing GOPs:  90%|█████████ | 36/40 [00:08<00:00,  4.35it/s]Analyzing GOPs:  92%|█████████▎| 37/40 [00:08<00:00,  4.36it/s]Analyzing GOPs:  95%|█████████▌| 38/40 [00:09<00:00,  4.35it/s]Analyzing GOPs:  98%|█████████▊| 39/40 [00:09<00:00,  4.36it/s]Analyzing GOPs: 100%|██████████| 40/40 [00:09<00:00,  4.35it/s]Analyzing GOPs: 100%|██████████| 40/40 [00:09<00:00,  4.20it/s]
+
+📊 Motion Analysis:
+   Total GOPs: 40
+   GOPs with moving objects: 0
+   Total objects: 1668
+   Moving objects: 0 (0.0%)
+   Static objects: 1668 (100.0%)
+
+💾 Results saved to: results/moving_objects_analysis.json
+
+================================================================================
+📊 SUMMARY - MOVING OBJECTS ANALYSIS
+================================================================================
+
+Dataset    Total GOPs   Moving GOPs    Total Obj    Moving Obj   Motion %  
+--------------------------------------------------------------------------------
+MOT17      19           0              591          0            0.0       
+MOT15      47           0              794          0            0.0       
+MOT20      40           0              1668         0            0.0       
+
+================================================================================
+💡 JUSTIFICATION
+================================================================================
+
+Static objects may show 'false motion' due to:
+  • Illumination changes across frames
+  • Video compression/reconstruction artifacts
+  • Minor camera vibration or lens effects
+
+By filtering to ONLY moving objects, we evaluate the MV model's
+true advantage: tracking objects that actually change position.
+The I-frame baseline assumes objects don't move, so it should
+fail on moving objects while succeeding on truly static ones.
+
+
+================================
+Analysis complete!
+Results saved to: results/moving_objects_analysis.json
+================================

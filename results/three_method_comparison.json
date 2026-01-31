@@ -1,0 +1,98 @@
+{
+  "MOT17": {
+    "iframe": {
+      "moving_map": 0.4793615424468012,
+      "moving_std": 0.0744852282828942,
+      "static_map": 0.8850344076287847,
+      "static_std": 0.07916387535249657,
+      "moving_count": 404,
+      "static_count": 187
+    },
+    "mean_vc": {
+      "moving_map": 0.7268412748201749,
+      "moving_std": 0.1464010099809628,
+      "static_map": 0.8606489961511248,
+      "static_std": 0.08697714669516526,
+      "moving_count": 404,
+      "static_count": 187
+    },
+    "mv_model": {
+      "moving_map": 0.3911489722871376,
+      "moving_std": 0.10858873756482697,
+      "static_map": 0.8370352751312877,
+      "static_std": 0.10780182466807281,
+      "moving_count": 404,
+      "static_count": 187
+    },
+    "static_sequences": [
+      "MOT17-01-SDP",
+      "MOT17-03-SDP"
+    ]
+  },
+  "MOT15": {
+    "iframe": {
+      "moving_map": 0.2427889483816167,
+      "moving_std": 0.14689135680854457,
+      "static_map": 0.4616314772845123,
+      "static_std": 0.41768142454581153,
+      "moving_count": 690,
+      "static_count": 104
+    },
+    "mean_vc": {
+      "moving_map": 0.41141537904547304,
+      "moving_std": 0.26305455338313843,
+      "static_map": 0.4455276031447272,
+      "static_std": 0.40543162425205653,
+      "moving_count": 690,
+      "static_count": 104
+    },
+    "mv_model": {
+      "moving_map": 0.11493981302944559,
+      "moving_std": 0.0889344045596142,
+      "static_map": 0.41097235508524066,
+      "static_std": 0.38068372743062473,
+      "moving_count": 690,
+      "static_count": 104
+    },
+    "static_sequences": [
+      "ADL-Rundle-3",
+      "AVG-TownCentre",
+      "KITTI-16",
+      "PETS09-S2L2",
+      "TUD-Crossing",
+      "Venice-1"
+    ]
+  },
+  "MOT20": {
+    "iframe": {
+      "moving_map": 0.3814077134644883,
+      "moving_std": 0.09445568882749798,
+      "static_map": 0.6271614258286456,
+      "static_std": 0.359349933364444,
+      "moving_count": 1303,
+      "static_count": 365
+    },
+    "mean_vc": {
+      "moving_map": 0.6247875248267075,
+      "moving_std": 0.14859145998377307,
+      "static_map": 0.595529454148769,
+      "static_std": 0.34121150528458344,
+      "moving_count": 1303,
+      "static_count": 365
+    },
+    "mv_model": {
+      "moving_map": 0.2544923448813111,
+      "moving_std": 0.0641417363294631,
+      "static_map": 0.5071192280691006,
+      "static_std": 0.3246636539226637,
+      "moving_count": 1303,
+      "static_count": 365
+    },
+    "static_sequences": [
+      "MOT20-04",
+      "MOT20-06",
+      "MOT20-07",
+      "MOT20-08"
+    ]
+  }
+}

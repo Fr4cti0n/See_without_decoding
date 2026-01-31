@@ -1,0 +1,374 @@
+
+
+
+\section{Model Architecture and Training}
+\label{sec:architecture}
+
+Building on the compressed-domain representation described above, we design a lightweight model for \textbf{object detection in compressed video}. The architecture aims to exploit both spatial cues contained in transform-domain features and temporal dependencies captured by motion vectors, while maintaining very low computational cost.
+
+\paragraph{Architecture overview.}
+Our model integrates a \textbf{Multi-ROI encoder} with a recurrent backbone. Each GOP sequence is first decomposed into motion and DCT tensors. These features are projected into a compact latent space and processed at multiple spatial scales to enhance robustness to object size variation. The resulting embeddings are then aggregated over time through a \textbf{Long Short-Term Memory (LSTM)} network, which models motion continuity and temporal context across frames.  
+This design allows the model to track object dynamics directly in the compressed domain, without relying on pixel-level information. Figure~\ref{fig:model_architecture} (to be added) illustrates the complete processing pipeline.
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figs/model_architecture_placeholder.eps}
+    \caption{\textbf{Model architecture overview.} 
+    Multi-ROI encoder processes motion and DCT features at multiple scales; temporal dependencies are captured through an LSTM module for object detection in compressed video.}
+    \label{fig:model_architecture}
+\end{figure}
+% Fast DCT-MV Tracker Architecture Diagram
+% Requires: \usepackage{tikz}
+% Requires: \usetikzlibrary{positioning,shapes.geometric,arrows.meta,calc}
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=1.8cm,
+    box/.style={rectangle, draw, minimum width=2.8cm, minimum height=1cm, align=center},
+    input/.style={box, fill=blue!20},
+    process/.style={box, fill=green!20},
+    lstm/.style={box, fill=orange!20, minimum width=2.8cm},
+    output/.style={box, fill=red!20},
+    shape/.style={font=\tiny\ttfamily, text=blue!70!black},
+    arrow/.style={-Stealth, thick}]
+
+    % Input branches
+    \node[input] (mv) {Motion Vectors\\\textbf{(MV)}};
+    \node[shape, below=0.05cm of mv] {$[B,H,W,2]$};
+
+    \node[input, right=of mv] (dct) {DCT Coefficients\\\textbf{(DCT)}};
+    \node[shape, below=0.05cm of dct] {$[B,H,W,C_{dct}]$};
+
+    \node[input, right=of dct] (iframe) {I-frame Boxes\\\textbf{($B_0$)}};
+    \node[shape, below=0.05cm of iframe] {$[B,N,4]$};
+
+    % Encoder branches
+    \node[process, below=2cm of mv] (mv_conv) {MV Encoder\\Conv2d+ReLU};
+    \node[shape, below=0.05cm of mv_conv] {$[B,64,H,W]$};
+
+    \node[process, below=2cm of dct] (dct_conv) {DCT Encoder\\Conv2d+ReLU};
+    \node[shape, below=0.05cm of dct_conv] {$[B,C_{dct},H,W]$};
+
+    % Global pooling
+    \node[process, below=2.3cm of mv_conv] (mv_pool) {Global Avg\\Pool};
+    \node[shape, below=0.05cm of mv_pool] {$[B,64]$};
+
+    \node[process, below=2.3cm of dct_conv] (dct_pool) {Global Avg\\Pool};
+    \node[shape, below=0.05cm of dct_pool] {$[B,C_{dct}]$};
+
+    % Feature concatenation
+    \node[process, below=2.5cm of $(mv_pool)!0.5!(dct_pool)$] (concat) {Concatenate};
+    \node[shape, below=0.05cm of concat] {$[B,64+C_{dct}]$};
+
+    % Box embedding branch
+    \node[process, below=2cm of iframe] (box_embed) {Box Embed\\Linear(4→256)};
+    \node[shape, below=0.05cm of box_embed] {$[B,N,256]$};
+
+    % Expand global context
+    \node[process, below=2.3cm of concat] (expand) {Expand\&Concat};
+    \node[shape, below=0.05cm of expand] {$[B,N,256+64+C_{dct}]$};
+
+    % LSTM processing
+    \node[lstm, below=2.5cm of $(box_embed)!0.5!(expand)$] (lstm) {1-Layer LSTM\\Hidden=256};
+    \node[shape, below=0.05cm of lstm] {$[B,N,256]$};
+
+    % Prediction heads
+    \node[output, below=2.3cm of lstm, xshift=-2cm] (bbox_head) {BBox Head\\Linear(256→4)};
+    \node[shape, below=0.05cm of bbox_head] {$[B,N,4]$};
+
+    \node[output, below=2.3cm of lstm, xshift=2cm] (conf_head) {Conf Head\\Linear+Sigmoid};
+    \node[shape, below=0.05cm of conf_head] {$[B,N,1]$};
+
+    % Final output
+    \node[output, below=2.5cm of $(bbox_head)!0.5!(conf_head)$] (final) {Predicted Boxes\\$B_t = B_0 + \Delta_{box}$};
+    \node[shape, below=0.05cm of final] {$[B,N,4]$};
+
+    % Flow arrows
+    \draw[arrow] (mv) -- (mv_conv);
+    \draw[arrow] (dct) -- (dct_conv);
+    \draw[arrow] (iframe) -- (box_embed);
+    \draw[arrow] (mv_conv) -- (mv_pool);
+    \draw[arrow] (dct_conv) -- (dct_pool);
+    \draw[arrow] (mv_pool) -- (concat);
+    \draw[arrow] (dct_pool) -- (concat);
+    \draw[arrow] (concat) -- (expand);
+    \draw[arrow] (box_embed) -- (lstm);
+    \draw[arrow] (expand) -- node[left, font=\tiny] {context} (lstm);
+    \draw[arrow] (lstm) -- (bbox_head);
+    \draw[arrow] (lstm) -- (conf_head);
+    \draw[arrow] (bbox_head) -- (final);
+    \draw[arrow] (conf_head) -- (final);
+
+\end{tikzpicture}
+\caption{\textbf{Fast Architecture with Tensor Shapes.} $B$=batch, $N$=objects, $H \times W$=spatial (60$\times$60), $C_{dct}$=8/16/32/64 DCT channels. Global pooling eliminates ROI operations: 7.8$\times$ fewer parameters (212K--258K).}
+\label{fig:fast_architecture}
+\end{figure*}
+
+
+
+
+% Architecture Comparison Table
+\begin{table}[htbp]
+\centering
+\caption{Architecture Comparison: Fast vs Standard}
+\label{tab:architecture_comparison}
+\begin{tabular}{lcc}
+\toprule
+Component & Standard & Fast \\
+\midrule
+Feature Extraction & ROI Align & Global Avg Pool \\
+Attention Mechanism & Multi-head & None \\
+LSTM Layers & 2 & 1 \\
+Hidden Dim & 512 & 256 \\
+\midrule
+Total Parameters & 1.9M & 212K--258K \\
+Parameter Reduction & 1$\times$ & \textbf{7.8$\times$} \\
+\midrule
+FPS (GPU) & $\sim$800 & $\sim$1,600 \\
+Speedup & 1$\times$ & \textbf{2$\times$} \\
+\midrule
+mAP @0.5 (Full GOP) & 0.52 & 0.49 \\
+mAP @0.5 (6P) & 0.83 & 0.77--0.81 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Input Modality Variants
+\begin{table}[htbp]
+\centering
+\caption{Fast Architecture Variants: Input Modality Ablation}
+\label{tab:architecture_variants}
+\begin{tabular}{llcc}
+\toprule
+Variant & Inputs & Channels & Parameters \\
+\midrule
+MV-only & Motion vectors only & $C_{mv}$ & 212K \\
+DCT-8 & DCT (8 coeffs) only & $C_{dct}=8$ & 215K \\
+DCT-16 & DCT (16 coeffs) only & $C_{dct}=16$ & 220K \\
+DCT-32 & DCT (32 coeffs) only & $C_{dct}=32$ & 229K \\
+DCT-64 & DCT (64 coeffs) only & $C_{dct}=64$ & 247K \\
+\midrule
+MV+DCT-8 & MV + DCT (8 coeffs) & $C_{mv}+8$ & 223K \\
+MV+DCT-16 & MV + DCT (16 coeffs) & $C_{mv}+16$ & 228K \\
+MV+DCT-32 & MV + DCT (32 coeffs) & $C_{mv}+32$ & 237K \\
+MV+DCT-64 & MV + DCT (64 coeffs) & $C_{mv}+64$ & 258K \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Temporal modeling and training setup.}
+A key distinction of our approach lies in its ability to process long temporal sequences. We train the network on GOP segments of up to \textbf{50 predictive frames}, substantially longer than the short sequences (4–12 frames) typically used in prior compressed-domain studies~\cite{Wang_2021,10179919,real_time_online_multi_object_tracking_2022}. This setup allows us to evaluate how temporal dependencies are captured directly from motion-vector dynamics without explicit RGB supervision.  
+Training is performed using a detection objective over consecutive GOPs, with temporal consistency regularization to stabilize feature drift.
+
+\paragraph{Use case and datasets.}
+We focus on pedestrian detection under real-world surveillance conditions, using the MOTS15, MOTS17, and MOTS20 benchmarks. These datasets include complex urban scenes with varying crowd density, occlusions, and lighting, providing a realistic evaluation of compressed-domain analytics for city-scale monitoring.
+
+\paragraph{Results and observations.}
+Preliminary results highlight two operating regimes. For sequences captured by \textbf{static cameras}, the model achieves a mean $\text{mAP}_{0.5}$ of approximately \textbf{0.8} on the first 10 P-frames—comparable to RGB-based baselines—before gradually degrading as temporal drift accumulates over longer GOPs. In contrast, sequences from moving cameras exhibit stronger instability, as background variation amplifies motion-vector noise.  
+Despite this limitation, the system remains highly efficient: it contains \textbf{10$\times$ fewer parameters} than a comparable RGB detector and processes video at up to \textbf{1,405 FPS} (vs. 140 FPS for the full-decode baseline).
+% Table 1: Validation mAP and 50P Frames Comparison with RGB Baseline
+% Table 1: Validation mAP and 50P Frames Comparison with RGB Baseline (General Analysis)
+% Table 1: Validation mAP and 50P Frames Comparison with RGB Baseline (General Analysis)
+% Table 1: Validation mAP and 50P Frames Comparison with RGB Baseline (General Analysis)
+\begin{table}[htbp]
+\centering
+\caption{Validation mAP@0.5 Comparison: Compressed Domain vs RGB Baseline (50P Frames - General Analysis)}
+\label{tab:ablation_val_50p}
+\begin{tabular}{lcccccc}
+\toprule
+Variant & Val mAP & Static (50P) & Moving (50P) & Avg (50P) & $\Delta$ vs RGB & $\Delta$ (\%) \\
+\midrule
+RGB Baseline & --- & --- & --- & 0.8347$\pm$0.0120 & --- & --- \\
+\midrule
+MV-only & 0.4922 & 0.5594 & 0.4115 & 0.4855 & -0.3657 & -43.0 \\
+DCT-8 & 0.4884 & 0.5646 & 0.3969 & 0.4807 & -0.3705 & -43.5 \\
+DCT-16 & 0.5019 & 0.5692 & 0.4211 & 0.4952 & -0.3560 & -41.8 \\
+DCT-32 & 0.4778 & 0.5797 & 0.3554 & 0.4676 & -0.3836 & -45.1 \\
+DCT-64 & 0.4761 & 0.5892 & 0.3402 & 0.4647 & -0.3865 & -45.4 \\
+MV$+$DCT-8 & 0.4698 & 0.5790 & 0.3387 & 0.4589 & -0.3923 & -46.1 \\
+MV$+$DCT-16 & 0.4743 & 0.5608 & 0.3706 & 0.4657 & -0.3855 & -45.3 \\
+MV$+$DCT-32 & 0.5014 & 0.5775 & 0.4101 & 0.4938 & -0.3574 & -42.0 \\
+MV$+$DCT-64 & 0.3495 & 0.5433 & 0.1170 & 0.3302 & -0.5210 & -61.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 2: 12P Frames Comparison with RGB Baseline (Static Cameras Only - Medium GOP)
+\begin{table}[htbp]
+\centering
+\caption{Medium GOP (12P) mAP@0.5 Comparison: Compressed Domain vs RGB Baseline (Static Cameras Only)}
+\label{tab:ablation_12p}
+\begin{tabular}{lcccc}
+\toprule
+Variant & Val mAP & Static (12P) & $\Delta$ vs RGB & $\Delta$ (\%) \\
+\midrule
+RGB Baseline & --- & 0.8412$\pm$0.0245 & --- & --- \\
+\midrule
+MV-only & 0.4922 & 0.6978$\pm$0.0266 & -0.1434 & -17.0 \\
+DCT-8 & 0.4884 & 0.6915$\pm$0.0268 & -0.1497 & -17.8 \\
+DCT-16 & 0.5019 & 0.6912$\pm$0.0267 & -0.1500 & -17.8 \\
+DCT-32 & 0.4778 & 0.6972$\pm$0.0269 & -0.1440 & -17.1 \\
+DCT-64 & 0.4761 & 0.6967$\pm$0.0270 & -0.1445 & -17.2 \\
+MV$+$DCT-8 & 0.4698 & 0.6933$\pm$0.0267 & -0.1479 & -17.6 \\
+MV$+$DCT-16 & 0.4743 & 0.6891$\pm$0.0268 & -0.1521 & -18.1 \\
+MV$+$DCT-32 & 0.5014 & 0.6949$\pm$0.0267 & -0.1463 & -17.4 \\
+MV$+$DCT-64 & 0.3495 & 0.6472$\pm$0.0303 & -0.1940 & -23.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3: 6P Frames Comparison with RGB Baseline (Static Cameras Only - Small GOP, Best Performance)
+\begin{table}[htbp]
+\centering
+\caption{Small GOP (6P) mAP@0.5 Comparison: Compressed Domain vs RGB Baseline (Static Cameras Only - Best Performance)}
+\label{tab:ablation_6p}
+\begin{tabular}{lcccc}
+\toprule
+Variant & Val mAP & Static (6P) & $\Delta$ vs RGB & $\Delta$ (\%) \\
+\midrule
+RGB Baseline & --- & 0.8412$\pm$0.0245 & --- & --- \\
+\midrule
+MV-only & 0.4922 & 0.8077$\pm$0.0312 & -0.0335 & -4.0 \\
+DCT-8 & 0.4884 & 0.7971$\pm$0.0329 & -0.0441 & -5.2 \\
+DCT-16 & 0.5019 & 0.8018$\pm$0.0334 & -0.0394 & -4.7 \\
+DCT-32 & 0.4778 & 0.7979$\pm$0.0350 & -0.0433 & -5.2 \\
+DCT-64 & 0.4761 & 0.8015$\pm$0.0335 & -0.0397 & -4.7 \\
+MV$+$DCT-8 & 0.4698 & 0.7986$\pm$0.0338 & -0.0426 & -5.1 \\
+MV$+$DCT-16 & 0.4743 & 0.7982$\pm$0.0333 & -0.0430 & -5.1 \\
+MV$+$DCT-32 & 0.5014 & 0.8015$\pm$0.0337 & -0.0397 & -4.7 \\
+MV$+$DCT-64 & 0.3495 & 0.7653$\pm$0.0394 & -0.0759 & -9.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 1: Standalone Deployment Analysis
+\begin{table*}[htbp]
+\centering
+\caption{Standalone Deployment: Compressed Domain vs RGB Baseline (16GB GPU)}
+\label{tab:speed_standalone}
+\begin{tabular}{lccccc}
+\toprule
+Variant & Total VRAM & Frame Time & \multicolumn{3}{c}{16GB GPU Capacity} \\
+ & (MB) & (ms) & \# Instances & Total FPS & 30 FPS Cameras \\
+\midrule
+\textbf{RT-DETR (RGB)} & 1563.00 & 22.22 & 9 & 405.0 & 13 \\
+\midrule
+MV-only & 29.41 & 0.56 & 522 & 927294.9 & 30909 \\
+DCT-8 & 72.58 & 0.60 & 211 & 352758.4 & 11758 \\
+DCT-16 & 135.94 & 0.59 & 112 & 188444.3 & 6281 \\
+DCT-32 & 260.52 & 0.60 & 58 & 96082.6 & 3202 \\
+DCT-64 & 507.97 & 0.57 & 30 & 52552.3 & 1751 \\
+MV$+$DCT-8 & 78.06 & 0.74 & 196 & 264081.4 & 8802 \\
+MV$+$DCT-16 & 141.37 & 0.71 & 108 & 152671.1 & 5089 \\
+MV$+$DCT-32 & 266.04 & 0.72 & 57 & 78748.7 & 2624 \\
+MV$+$DCT-64 & 513.41 & 0.65 & 29 & 44349.1 & 1478 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% Table 2: GOP-Based Deployment Analysis
+\begin{table*}[htbp]
+\centering
+\caption{GOP-Based Deployment: RT-DETR (I-frame) + Compressed Domain (P-frames) on 16GB GPU}
+\label{tab:speed_gop}
+\begin{tabular}{lccc}
+\toprule
+Variant & GOP-6 (1I+5P) & GOP-12 (1I+11P) & GOP-50 (1I+49P) \\
+ & 30 FPS Cameras & 30 FPS Cameras & 30 FPS Cameras \\
+\midrule
+\textbf{RT-DETR (RGB)} & 13 & 13 & 13 \\
+\midrule
+MV-only & 71 & 126 & 301 \\
+DCT-8 & 71 & 124 & 291 \\
+DCT-16 & 71 & 125 & 292 \\
+DCT-32 & 63 & 110 & 257 \\
+DCT-64 & 55 & 98 & 232 \\
+MV$+$DCT-8 & 69 & 118 & 256 \\
+MV$+$DCT-16 & 69 & 119 & 263 \\
+MV$+$DCT-32 & 61 & 106 & 231 \\
+MV$+$DCT-64 & 54 & 95 & 215 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+
+
+
+\paragraph{Discussion.}
+These findings confirm that rich spatiotemporal information exists in compressed data and can support effective detection without pixel reconstruction. While accuracy decreases on extended GOPs, the combination of compressed-domain learning and long-range temporal modeling offers a promising foundation for scalable, low-cost surveillance analytics.
+
+
+
+\subsection{Additional packages and functions}
+
+Update the sample file according to your text. You can add
+packages or declare new \LaTeX\ functions if and only if there is no conflict between your packages and the esannV2.cls style file.
+
+\subsection{Style information}
+
+\subsubsection{Page numbers}
+Please do not add page numbers to this style; page numbers will be added by the publisher.
+\subsubsection{Page headings}
+Do not add headings to your document.
+\subsection{Mathematics}
+You may include additional packages for typesetting
+algorithms, mathematical formula or to define new operators and environments
+if and only if there is no conflict with the esannV2.cls
+file.
+
+It is recommended to avoid the numbering of equations when not
+necessary. When dealing with equation arrays, it could be
+necessary to label several (in)equalities. You can do it using the
+`$\backslash$stackrel' operator (see the ESANNV2.tex source file);
+example:
+
+\begin{eqnarray}
+c&=&|d|+|e|\nonumber\\
+&\stackrel{\text{(a)}}{=}&d+e\nonumber\\
+&\stackrel{\text{(b)}}{\geq}&\sqrt{f}\enspace,
+\end{eqnarray}
+\noindent where the equality (a) results from the fact that both
+$d$ and $e$ are positive while (b) comes from the definition of
+$f$.
+
+\subsection{Tables and figures}
+
+Figure \ref{Fig:MV} shows an example of figure and related
+caption.  Do not use too small symbols and lettering in your
+figures.  Warning: your paper will be printed in black and white
+in the proceedings.  You may insert color figures, but it is your
+responsibility to check that they print correctly in black and
+white.  The color version will be kept in the ESANN electronic
+proceedings available on the web.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.6]{figs/ESANN2005BW.eps}
+\caption{ESANN 2005: Announcement and call for
+papers.}\label{Fig:MV}
+\end{figure}
+
+Table \ref{Tab:AgeWeight} shows an example of table.
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    ID & age & weight \\
+    \hline
+    1& 15 & 65 \\
+    2& 24 & 74\\
+    3& 18 & 69 \\
+    4& 32 & 78 \\
+    \hline
+  \end{tabular}
+  \caption{Age and weight of people.}\label{Tab:AgeWeight}
+\end{table}
+
+\section{Citation}
+This ESANNV2.tex file defines how to insert references, both for
+BiBTeX and non-BiBTeX users.  Please read the instructions in this
+file.

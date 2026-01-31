@@ -1,0 +1,20 @@
+{
+  "sequences": {},
+  "overall_metrics": {
+    "loss_metrics": {
+      "avg_bbox_loss": 0.0,
+      "avg_id_loss": 0.0,
+      "avg_total_loss": 0.0
+    },
+    "detection_metrics": {},
+    "tracking_metrics": {
+      "avg_id_accuracy": 0.0
+    }
+  },
+  "config": {
+    "model_path": "../../outputs/checkpoint_epoch_3.pt",
+    "data_path": "/home/aduche/Bureau/datasets/MOTS/videos/",
+    "num_sequences": 1,
+    "device": "cpu"
+  }
+}

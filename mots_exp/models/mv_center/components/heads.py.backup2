@@ -1,0 +1,325 @@
+"""
+MV-Center Detection Heads
+
+Shared detection head that operates on unified FPN features to predict:
+1. Center heatmap (object center locations)
+2. Box regression (dx, dy, log w, log h) 
+3. Optional embedding features
+
+Based on CenterNet design but optimized for motion vector data.
+"""
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import math
+
+
+class DetectionHead(nn.Module):
+    """
+    Shared detection head for MV-Center.
+    
+    Takes unified features from FPN and predicts:
+    - Center heatmap: Object center confidence
+    - Box regression: Box offset and size
+    - Optional embeddings: For tracking/association
+    
+    Architecture is shared across all FPN levels.
+    """
+    
+    def __init__(self, input_channels=128, num_classes=1, embedding_dim=128, use_embeddings=False):
+        """
+        Args:
+            input_channels: Number of input channels from FPN (128)
+            num_classes: Number of object classes (1 for generic objects)
+            embedding_dim: Embedding dimension for tracking
+            use_embeddings: Whether to predict embedding features
+        """
+        super().__init__()
+        
+        self.input_channels = input_channels
+        self.num_classes = num_classes
+        self.embedding_dim = embedding_dim
+        self.use_embeddings = use_embeddings
+        
+        # Shared feature extraction
+        self.shared_conv = nn.Sequential(
+            nn.Conv2d(input_channels, input_channels, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(input_channels),
+            nn.ReLU(inplace=True),
+            
+            nn.Conv2d(input_channels, input_channels, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(input_channels),
+            nn.ReLU(inplace=True),
+        )
+        
+        # Center heatmap head
+        self.center_head = nn.Sequential(
+            nn.Conv2d(input_channels, input_channels // 2, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(input_channels // 2, num_classes, kernel_size=1)
+        )
+        
+        # Box regression head (dx, dy, log w, log h)
+        self.box_head = nn.Sequential(
+            nn.Conv2d(input_channels, input_channels // 2, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(input_channels // 2, 4, kernel_size=1)
+        )
+        
+        # Optional: Embedding head for tracking
+        if use_embeddings:
+            self.embedding_head = nn.Sequential(
+                nn.Conv2d(input_channels, input_channels // 2, kernel_size=3, padding=1),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(input_channels // 2, embedding_dim, kernel_size=1)
+            )
+        
+        # Initialize weights
+        self._initialize_weights()
+    
+    def _initialize_weights(self):
+        """Initialize weights with special attention to center head."""
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.ones_(m.weight)
+                nn.init.zeros_(m.bias)
+        
+        # Special initialization for center head (CenterNet style)
+        # Initialize with bias to have low initial activation
+        final_center_conv = self.center_head[-1]
+        if hasattr(final_center_conv, 'bias') and final_center_conv.bias is not None:
+            # Set bias so that sigmoid(bias) = 0.01 (low initial confidence)
+            nn.init.constant_(final_center_conv.bias, -math.log(99))
+    
+    def forward(self, features):
+        """
+        Forward pass through detection head.
+        
+        Args:
+            features: Dict of FPN features
+                - 'P3': [B, 128, 15, 15]
+                - 'P4': [B, 128, 8, 8]
+                
+        Returns:
+            predictions: Dict of predictions per level
+                - level: {
+                    'center': [B, num_classes, H, W],
+                    'box': [B, 4, H, W],
+                    'embedding': [B, embedding_dim, H, W] (optional)
+                  }
+        """
+        predictions = {}
+        
+        for level, feat in features.items():
+            # Shared feature processing
+            shared_feat = self.shared_conv(feat)
+            
+            # Center heatmap prediction
+            center_logits = self.center_head(shared_feat)  # Return logits for focal loss
+            
+            # Box regression prediction  
+            box_regression = self.box_head(shared_feat)  # [B, 4, H, W]
+            
+            level_pred = {
+                'center': center_logits,  # Return logits
+                'box': box_regression
+            }
+            
+            # Optional embedding prediction
+            if self.use_embeddings:
+                embedding = self.embedding_head(shared_feat)  # [B, embedding_dim, H, W]
+                # L2 normalize embeddings
+                embedding = F.normalize(embedding, p=2, dim=1)
+                level_pred['embedding'] = embedding
+            
+            predictions[level] = level_pred
+        
+        return predictions
+    
+    def decode_predictions(self, predictions, score_threshold=0.1, max_detections=100):
+        """
+        Decode predictions to bounding boxes.
+        
+        Args:
+            predictions: Raw model predictions
+            score_threshold: Minimum confidence threshold
+            max_detections: Maximum number of detections per level
+            
+        Returns:
+            detections: List of detections per level
+        """
+        all_detections = {}
+        
+        for level, pred in predictions.items():
+            center_logits = pred['center']  # [B, 1, H, W] - logits
+            center_heatmap = torch.sigmoid(center_logits)  # Apply sigmoid for inference
+            box_regression = pred['box']     # [B, 4, H, W]
+            
+            batch_detections = []
+            batch_size = center_heatmap.size(0)
+            
+            for b in range(batch_size):
+                # Extract single image predictions
+                center_map = center_heatmap[b, 0]  # [H, W]
+                box_reg = box_regression[b]        # [4, H, W]
+                
+                # Find peaks in center heatmap
+                detections = self._extract_peaks(
+                    center_map, box_reg, 
+                    score_threshold=score_threshold,
+                    max_detections=max_detections
+                )
+                
+                batch_detections.append(detections)
+            
+            all_detections[level] = batch_detections
+        
+        return all_detections
+    
+    def _extract_peaks(self, center_map, box_reg, score_threshold=0.1, max_detections=100):
+        """
+        Extract peak detections from center heatmap.
+        
+        Uses 3x3 max pooling to find local maxima (CenterNet style).
+        """
+        H, W = center_map.shape
+        
+        # Find local maxima using max pooling
+        center_map_pooled = F.max_pool2d(
+            center_map.unsqueeze(0).unsqueeze(0), 
+            kernel_size=3, stride=1, padding=1
+        ).squeeze()
+        
+        # Keep only local maxima
+        peak_mask = (center_map == center_map_pooled) & (center_map > score_threshold)
+        
+        # Get peak coordinates and scores
+        peak_indices = torch.nonzero(peak_mask, as_tuple=False)  # [N, 2] (y, x)
+        if len(peak_indices) == 0:
+            return torch.empty(0, 6)  # [x, y, w, h, score, class]
+        
+        peak_scores = center_map[peak_mask]  # [N]
+        
+        # Limit number of detections
+        if len(peak_indices) > max_detections:
+            top_k_indices = torch.topk(peak_scores, max_detections)[1]
+            peak_indices = peak_indices[top_k_indices]
+            peak_scores = peak_scores[top_k_indices]
+        
+        # Extract box regressions at peak locations
+        ys, xs = peak_indices[:, 0], peak_indices[:, 1]
+        box_regressions = box_reg[:, ys, xs].t()  # [N, 4]
+        
+        # Convert to bounding boxes
+        # box_regression format: [dx, dy, log(w), log(h)]
+        dx, dy, log_w, log_h = box_regressions.unbind(1)
+        
+        # Center coordinates (add regression offsets)
+        cx = xs.float() + dx
+        cy = ys.float() + dy
+        
+        # Box dimensions (exp of log predictions)
+        w = torch.exp(log_w)
+        h = torch.exp(log_h)
+        
+        # Convert to detection format [cx, cy, w, h, score, class]
+        detections = torch.stack([
+            cx, cy, w, h, peak_scores, 
+            torch.zeros_like(peak_scores)  # class = 0 for all
+        ], dim=1)
+        
+        return detections
+
+
+def create_detection_head(input_channels=128, num_classes=1, embedding_dim=128, use_embeddings=False):
+    """
+    Factory function to create detection head.
+    
+    Args:
+        input_channels: FPN output channels
+        num_classes: Number of object classes  
+        embedding_dim: Embedding dimension
+        use_embeddings: Whether to predict embeddings
+        
+    Returns:
+        head: DetectionHead instance
+    """
+    return DetectionHead(
+        input_channels=input_channels,
+        num_classes=num_classes, 
+        embedding_dim=embedding_dim,
+        use_embeddings=use_embeddings
+    )
+
+
+if __name__ == "__main__":
+    # Test the detection head
+    print("Testing MV-Center Detection Head...")
+    
+    # Create detection head
+    head = create_detection_head(
+        input_channels=128, 
+        num_classes=1, 
+        embedding_dim=128, 
+        use_embeddings=True
+    )
+    
+    # Simulate FPN features
+    batch_size = 2
+    features = {
+        'P3': torch.randn(batch_size, 128, 15, 15),
+        'P4': torch.randn(batch_size, 128, 8, 8)
+    }
+    
+    print(f"Input features:")
+    for level, feat in features.items():
+        print(f"  {level}: {feat.shape}")
+    
+    # Forward pass
+    with torch.no_grad():
+        predictions = head(features)
+    
+    print(f"\nPredictions:")
+    for level, pred in predictions.items():
+        print(f"  {level}:")
+        for key, tensor in pred.items():
+            print(f"    {key}: {tensor.shape}, range: [{tensor.min():.3f}, {tensor.max():.3f}]")
+    
+    # Test decoding
+    print(f"\nTesting detection decoding...")
+    detections = head.decode_predictions(predictions, score_threshold=0.01, max_detections=10)
+    
+    for level, level_detections in detections.items():
+        print(f"  {level}: {len(level_detections)} batches")
+        for b, dets in enumerate(level_detections):
+            print(f"    Batch {b}: {len(dets)} detections")
+            if len(dets) > 0:
+                print(f"      Example: {dets[0]}")  # [cx, cy, w, h, score, class]
+    
+    # Count parameters
+    def count_parameters(model):
+        return sum(p.numel() for p in model.parameters() if p.requires_grad)
+    
+    print(f"\nParameter count: {count_parameters(head):,}")
+    
+    # Test without embeddings
+    print(f"\nTesting without embeddings...")
+    head_no_emb = create_detection_head(
+        input_channels=128, 
+        num_classes=1, 
+        use_embeddings=False
+    )
+    
+    with torch.no_grad():
+        predictions_no_emb = head_no_emb(features)
+    
+    print(f"Predictions (no embeddings):")
+    for level, pred in predictions_no_emb.items():
+        print(f"  {level}: {list(pred.keys())}")
+    
+    print(f"Parameter count (no embeddings): {count_parameters(head_no_emb):,}")

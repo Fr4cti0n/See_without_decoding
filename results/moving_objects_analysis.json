@@ -1,0 +1,44 @@
+{
+  "MOT17": {
+    "total_gops": 19,
+    "gops_with_moving_objects": 19,
+    "total_objects": 591,
+    "moving_objects": 404,
+    "static_objects": 187,
+    "motion_ratio": 0.6835871404399323,
+    "static_sequences": [
+      "MOT17-01-SDP",
+      "MOT17-03-SDP"
+    ]
+  },
+  "MOT15": {
+    "total_gops": 47,
+    "gops_with_moving_objects": 44,
+    "total_objects": 794,
+    "moving_objects": 690,
+    "static_objects": 104,
+    "motion_ratio": 0.8690176322418136,
+    "static_sequences": [
+      "ADL-Rundle-3",
+      "AVG-TownCentre",
+      "KITTI-16",
+      "PETS09-S2L2",
+      "TUD-Crossing",
+      "Venice-1"
+    ]
+  },
+  "MOT20": {
+    "total_gops": 40,
+    "gops_with_moving_objects": 40,
+    "total_objects": 1668,
+    "moving_objects": 1303,
+    "static_objects": 365,
+    "motion_ratio": 0.7811750599520384,
+    "static_sequences": [
+      "MOT20-04",
+      "MOT20-06",
+      "MOT20-07",
+      "MOT20-08"
+    ]
+  }
+}

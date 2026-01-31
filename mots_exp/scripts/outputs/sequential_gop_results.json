@@ -1,0 +1,11 @@
+{
+  "model": "sequential_gop_tracker",
+  "final_loss": 0.0,
+  "epochs": 1,
+  "learning_rate": 0.001,
+  "max_objects": 8,
+  "sequence_length": 8,
+  "gop_length": 10,
+  "device": "cuda",
+  "training_mode": "sequential_gop_pframes"
+}

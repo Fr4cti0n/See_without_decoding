@@ -1,0 +1,334 @@
+========================================
+Three-Method Comparison
+========================================
+
+✅ Dataset factory imported successfully
+🖥️  Using device: cuda
+
+📦 Loading MV model from: experiments/ablation_fast/mv_only/best_model.pt
+🧠 Creating MV-Center V1 model...
+   ⚡ Using FAST DCT-MV model (no ROI, no attention)
+      - DCT residuals: 0 coefficients
+      - Motion vectors: enabled
+      - Architecture: Global pooling + Simple LSTM
+      - Expected speedup: ~2-3x faster than standard model
+      🔬 Ablation config: mv_channels=2, dct_channels=0
+   🎯 Using DETR-style detection loss:
+      - Hungarian matching for optimal object assignment
+      - Focal Loss (α=0.25, γ=2.0)
+      - Box weight: 5.0, GIoU weight: 2.0
+      - Class weight: 2.0, No-object weight: 0.1
+   ✅ Model loaded successfully
+   📊 Model config: version=v1, use_mv_only=False
+
+================================================================================
+🔬 THREE-METHOD COMPARISON: Mean-VC vs I-frame vs MV Model
+================================================================================
+📊 Motion threshold: 0.01 (normalized)
+📊 IoU threshold: 0.5
+
+
+================================================================================
+📊 Evaluating MOT17
+================================================================================
+
+📁 Loading MOT17 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot17']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT17 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 7 video sequences. Scanning GOP indices...
+         [1/7] MOT17-01-SDP_960x960_gop50_500... ✓ (9 GOPs)
+         [2/7] MOT17-07-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [3/7] MOT17-03-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [4/7] MOT17-06-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [5/7] MOT17-08-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [6/7] MOT17-12-SDP_960x960_gop50_500... ✓ (10 GOPs)
+         [7/7] MOT17-14-SDP_960x960_gop50_500... ✓ (10 GOPs)
+      ✅ Scanned 7 sequences, found 69 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 69 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot17_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 69 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 69
+   ✅ Loaded 4140 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 19 static camera GOPs
+Evaluating MOT17:   0%|          | 0/19 [00:00<?, ?it/s]Evaluating MOT17:   5%|▌         | 1/19 [00:00<00:10,  1.75it/s]Evaluating MOT17:  11%|█         | 2/19 [00:01<00:09,  1.78it/s]Evaluating MOT17:  16%|█▌        | 3/19 [00:01<00:08,  1.81it/s]Evaluating MOT17:  21%|██        | 4/19 [00:02<00:08,  1.82it/s]Evaluating MOT17:  26%|██▋       | 5/19 [00:02<00:07,  1.82it/s]Evaluating MOT17:  32%|███▏      | 6/19 [00:03<00:07,  1.82it/s]Evaluating MOT17:  37%|███▋      | 7/19 [00:03<00:06,  1.82it/s]Evaluating MOT17:  42%|████▏     | 8/19 [00:04<00:06,  1.59it/s]Evaluating MOT17:  47%|████▋     | 9/19 [00:05<00:06,  1.66it/s]Evaluating MOT17:  53%|█████▎    | 10/19 [00:05<00:05,  1.70it/s]Evaluating MOT17:  58%|█████▊    | 11/19 [00:06<00:04,  1.74it/s]Evaluating MOT17:  63%|██████▎   | 12/19 [00:06<00:03,  1.77it/s]Evaluating MOT17:  68%|██████▊   | 13/19 [00:07<00:03,  1.79it/s]Evaluating MOT17:  74%|███████▎  | 14/19 [00:07<00:02,  1.80it/s]Evaluating MOT17:  79%|███████▉  | 15/19 [00:08<00:02,  1.81it/s]Evaluating MOT17:  84%|████████▍ | 16/19 [00:09<00:01,  1.81it/s]Evaluating MOT17:  89%|████████▉ | 17/19 [00:09<00:01,  1.81it/s]Evaluating MOT17:  95%|█████████▍| 18/19 [00:10<00:00,  1.80it/s]Evaluating MOT17: 100%|██████████| 19/19 [00:10<00:00,  1.79it/s]Evaluating MOT17: 100%|██████████| 19/19 [00:10<00:00,  1.77it/s]
+   ⚠️ Error processing GOP 0: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 1: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 2: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 3: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 4: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 5: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 6: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 7: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 8: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 19: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 20: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 21: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 22: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 23: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 24: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 25: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 26: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 27: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 28: index 2 is out of bounds for dimension 0 with size 1
+
+📊 Results for MOT17:
+
+   I-frame Baseline:
+      Moving objects (404): mAP = 0.4794
+      Static objects (187): mAP = 0.8850
+
+   Mean-VC Baseline:
+      Moving objects (0): mAP = 0.0000
+      Static objects (0): mAP = 0.0000
+
+   MV Model:
+      Moving objects (0): mAP = 0.0000
+      Static objects (0): mAP = 0.0000
+
+================================================================================
+📊 Evaluating MOT15
+================================================================================
+
+📁 Loading MOT15 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot15']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT15 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 11 video sequences. Scanning GOP indices...
+         [1/11] ADL-Rundle-3_960x960_gop50_500... ✓ (10 GOPs)
+         [2/11] ETH-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [3/11] KITTI-19_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/11] ADL-Rundle-1_960x960_gop50_500... ✓ (10 GOPs)
+         [5/11] TUD-Crossing_960x960_gop50_500... ✓ (5 GOPs)
+         [6/11] KITTI-16_960x960_gop50_500fram... ✓ (5 GOPs)
+         [7/11] Venice-1_960x960_gop50_500fram... ✓ (9 GOPs)
+         [8/11] PETS09-S2L2_960x960_gop50_500f... ✓ (9 GOPs)
+         [9/11] AVG-TownCentre_960x960_gop50_5... ✓ (9 GOPs)
+         [10/11] ETH-Jelmoli_960x960_gop50_500f... ✓ (9 GOPs)
+         [11/11] ETH-Linthescher_960x960_gop50_... ✓ (10 GOPs)
+      ✅ Scanned 11 sequences, found 91 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 91 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot15_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 91 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 91
+   ✅ Loaded 5460 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 47 static camera GOPs
+Evaluating MOT15:   0%|          | 0/47 [00:00<?, ?it/s]Evaluating MOT15:   2%|▏         | 1/47 [00:00<00:25,  1.83it/s]Evaluating MOT15:   4%|▍         | 2/47 [00:01<00:24,  1.81it/s]Evaluating MOT15:   6%|▋         | 3/47 [00:01<00:23,  1.84it/s]Evaluating MOT15:   9%|▊         | 4/47 [00:02<00:23,  1.86it/s]Evaluating MOT15:  11%|█         | 5/47 [00:02<00:22,  1.85it/s]Evaluating MOT15:  13%|█▎        | 6/47 [00:03<00:22,  1.85it/s]Evaluating MOT15:  15%|█▍        | 7/47 [00:03<00:21,  1.86it/s]Evaluating MOT15:  17%|█▋        | 8/47 [00:04<00:21,  1.85it/s]Evaluating MOT15:  19%|█▉        | 9/47 [00:04<00:20,  1.84it/s]Evaluating MOT15:  21%|██▏       | 10/47 [00:05<00:19,  1.85it/s]Evaluating MOT15:  23%|██▎       | 11/47 [00:05<00:19,  1.83it/s]Evaluating MOT15:  26%|██▌       | 12/47 [00:06<00:19,  1.81it/s]Evaluating MOT15:  28%|██▊       | 13/47 [00:07<00:18,  1.82it/s]Evaluating MOT15:  30%|██▉       | 14/47 [00:07<00:18,  1.77it/s]Evaluating MOT15:  34%|███▍      | 16/47 [00:08<00:13,  2.38it/s]Evaluating MOT15:  36%|███▌      | 17/47 [00:08<00:13,  2.29it/s]Evaluating MOT15:  38%|███▊      | 18/47 [00:09<00:14,  1.97it/s]Evaluating MOT15:  40%|████      | 19/47 [00:09<00:14,  1.98it/s]Evaluating MOT15:  43%|████▎     | 20/47 [00:10<00:10,  2.51it/s]Evaluating MOT15:  45%|████▍     | 21/47 [00:10<00:11,  2.30it/s]Evaluating MOT15:  47%|████▋     | 22/47 [00:11<00:11,  2.17it/s]Evaluating MOT15:  49%|████▉     | 23/47 [00:11<00:11,  2.07it/s]Evaluating MOT15:  51%|█████     | 24/47 [00:12<00:11,  2.02it/s]Evaluating MOT15:  53%|█████▎    | 25/47 [00:12<00:11,  1.98it/s]Evaluating MOT15:  55%|█████▌    | 26/47 [00:13<00:10,  1.96it/s]Evaluating MOT15:  57%|█████▋    | 27/47 [00:13<00:10,  1.93it/s]Evaluating MOT15:  60%|█████▉    | 28/47 [00:14<00:09,  1.92it/s]Evaluating MOT15:  62%|██████▏   | 29/47 [00:14<00:09,  1.91it/s]Evaluating MOT15:  64%|██████▍   | 30/47 [00:15<00:08,  1.90it/s]Evaluating MOT15:  66%|██████▌   | 31/47 [00:15<00:08,  1.87it/s]Evaluating MOT15:  68%|██████▊   | 32/47 [00:16<00:08,  1.84it/s]Evaluating MOT15:  70%|███████   | 33/47 [00:16<00:07,  1.83it/s]Evaluating MOT15:  72%|███████▏  | 34/47 [00:17<00:07,  1.82it/s]Evaluating MOT15:  74%|███████▍  | 35/47 [00:18<00:06,  1.83it/s]Evaluating MOT15:  77%|███████▋  | 36/47 [00:18<00:05,  1.83it/s]Evaluating MOT15:  79%|███████▊  | 37/47 [00:19<00:05,  1.81it/s]Evaluating MOT15:  81%|████████  | 38/47 [00:19<00:04,  1.93it/s]Evaluating MOT15:  83%|████████▎ | 39/47 [00:20<00:04,  1.89it/s]Evaluating MOT15:  85%|████████▌ | 40/47 [00:20<00:03,  1.79it/s]Evaluating MOT15:  87%|████████▋ | 41/47 [00:21<00:03,  1.66it/s]Evaluating MOT15:  89%|████████▉ | 42/47 [00:22<00:03,  1.48it/s]Evaluating MOT15:  91%|█████████▏| 43/47 [00:23<00:02,  1.41it/s]Evaluating MOT15:  94%|█████████▎| 44/47 [00:23<00:01,  1.51it/s]Evaluating MOT15:  96%|█████████▌| 45/47 [00:24<00:01,  1.60it/s]Evaluating MOT15:  98%|█████████▊| 46/47 [00:24<00:00,  1.67it/s]Evaluating MOT15: 100%|██████████| 47/47 [00:25<00:00,  1.72it/s]Evaluating MOT15: 100%|██████████| 47/47 [00:25<00:00,  1.86it/s]
+   ⚠️ Error processing GOP 0: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 1: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 2: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 3: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 4: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 5: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 6: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 7: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 8: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 9: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 35: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 36: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 37: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 40: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 41: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 42: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 43: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 45: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 46: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 47: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 48: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 49: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 50: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 51: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 52: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 53: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 54: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 55: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 56: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 57: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 58: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 59: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 60: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 61: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 62: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 63: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 64: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 65: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 66: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 67: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 68: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 69: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 70: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 71: index 2 is out of bounds for dimension 0 with size 1
+
+📊 Results for MOT15:
+
+   I-frame Baseline:
+      Moving objects (690): mAP = 0.2428
+      Static objects (104): mAP = 0.4616
+
+   Mean-VC Baseline:
+      Moving objects (0): mAP = 0.0000
+      Static objects (0): mAP = 0.0000
+
+   MV Model:
+      Moving objects (0): mAP = 0.0000
+      Static objects (0): mAP = 0.0000
+
+================================================================================
+📊 Evaluating MOT20
+================================================================================
+
+📁 Loading MOT20 dataset...
+🎯 Creating MOTS Dataset(s):
+   Datasets: ['mot20']
+   Resolution: 960x960
+   Mode: test
+   Combine datasets: False
+\n📁 Loading MOT20 dataset...
+   Path: /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+      🔍 Scanning 1 dataset directory...
+      📂 Finding video sequences in directory 1/1...
+      📹 Found 4 video sequences. Scanning GOP indices...
+         [1/4] MOT20-06_960x960_gop50_500fram... ✓ (10 GOPs)
+         [2/4] MOT20-07_960x960_gop50_500fram... ✓ (10 GOPs)
+         [3/4] MOT20-04_960x960_gop50_500fram... ✓ (10 GOPs)
+         [4/4] MOT20-08_960x960_gop50_500fram... ✓ (10 GOPs)
+      ✅ Scanned 4 sequences, found 40 GOPs total
+      🔍 Detecting GOP length...
+Detected GOP length from directory name: 50
+Found 40 sequences in /home/aduche/Bureau/datasets/MOTS/videos/test/mot20_videos_960x960_gop50_test/enhanced_dataset
+Detected GOP length: 50 frames
+Using sequence length: 60 frames
+Data loading config: iframe=False, pframe=False, motion=True, residuals=False, dct_coeffs=0, annotations=True, format=separate
+   ✅ Loaded 40 sequences
+\n📊 Summary:
+   Successfully loaded 1 dataset(s)
+   Total sequences: 40
+   ✅ Loaded 2400 samples
+
+🔍 Filtering to static camera GOPs...
+   ✅ Found 40 static camera GOPs
+Evaluating MOT20:   0%|          | 0/40 [00:00<?, ?it/s]Evaluating MOT20:   2%|▎         | 1/40 [00:00<00:21,  1.78it/s]Evaluating MOT20:   5%|▌         | 2/40 [00:01<00:21,  1.79it/s]Evaluating MOT20:   8%|▊         | 3/40 [00:01<00:20,  1.80it/s]Evaluating MOT20:  10%|█         | 4/40 [00:02<00:20,  1.80it/s]Evaluating MOT20:  12%|█▎        | 5/40 [00:02<00:19,  1.80it/s]Evaluating MOT20:  15%|█▌        | 6/40 [00:03<00:20,  1.66it/s]Evaluating MOT20:  18%|█▊        | 7/40 [00:04<00:19,  1.71it/s]Evaluating MOT20:  20%|██        | 8/40 [00:04<00:18,  1.74it/s]Evaluating MOT20:  22%|██▎       | 9/40 [00:05<00:19,  1.55it/s]Evaluating MOT20:  25%|██▌       | 10/40 [00:06<00:21,  1.38it/s]Evaluating MOT20:  28%|██▊       | 11/40 [00:06<00:19,  1.48it/s]Evaluating MOT20:  30%|███       | 12/40 [00:07<00:17,  1.56it/s]Evaluating MOT20:  32%|███▎      | 13/40 [00:07<00:16,  1.63it/s]Evaluating MOT20:  35%|███▌      | 14/40 [00:08<00:15,  1.67it/s]Evaluating MOT20:  38%|███▊      | 15/40 [00:09<00:14,  1.71it/s]Evaluating MOT20:  40%|████      | 16/40 [00:09<00:13,  1.74it/s]Evaluating MOT20:  42%|████▎     | 17/40 [00:10<00:13,  1.76it/s]Evaluating MOT20:  45%|████▌     | 18/40 [00:10<00:12,  1.77it/s]Evaluating MOT20:  48%|████▊     | 19/40 [00:11<00:11,  1.78it/s]Evaluating MOT20:  50%|█████     | 20/40 [00:11<00:11,  1.79it/s]Evaluating MOT20:  52%|█████▎    | 21/40 [00:12<00:11,  1.72it/s]Evaluating MOT20:  55%|█████▌    | 22/40 [00:13<00:10,  1.69it/s]Evaluating MOT20:  57%|█████▊    | 23/40 [00:13<00:10,  1.67it/s]Evaluating MOT20:  60%|██████    | 24/40 [00:14<00:09,  1.67it/s]Evaluating MOT20:  62%|██████▎   | 25/40 [00:14<00:09,  1.65it/s]Evaluating MOT20:  65%|██████▌   | 26/40 [00:15<00:09,  1.54it/s]Evaluating MOT20:  68%|██████▊   | 27/40 [00:16<00:08,  1.54it/s]Evaluating MOT20:  70%|███████   | 28/40 [00:16<00:07,  1.55it/s]Evaluating MOT20:  72%|███████▎  | 29/40 [00:17<00:06,  1.59it/s]Evaluating MOT20:  75%|███████▌  | 30/40 [00:18<00:06,  1.59it/s]Evaluating MOT20:  78%|███████▊  | 31/40 [00:18<00:05,  1.65it/s]Evaluating MOT20:  80%|████████  | 32/40 [00:19<00:04,  1.70it/s]Evaluating MOT20:  82%|████████▎ | 33/40 [00:19<00:04,  1.72it/s]Evaluating MOT20:  85%|████████▌ | 34/40 [00:20<00:03,  1.75it/s]Evaluating MOT20:  88%|████████▊ | 35/40 [00:20<00:02,  1.77it/s]Evaluating MOT20:  90%|█████████ | 36/40 [00:21<00:02,  1.78it/s]Evaluating MOT20:  92%|█████████▎| 37/40 [00:22<00:01,  1.79it/s]Evaluating MOT20:  95%|█████████▌| 38/40 [00:22<00:01,  1.79it/s]Evaluating MOT20:  98%|█████████▊| 39/40 [00:23<00:00,  1.79it/s]Evaluating MOT20: 100%|██████████| 40/40 [00:23<00:00,  1.78it/s]Evaluating MOT20: 100%|██████████| 40/40 [00:23<00:00,  1.68it/s]
+   ⚠️ Error processing GOP 0: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 1: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 2: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 3: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 4: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 5: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 6: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 7: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 8: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 9: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 10: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 11: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 12: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 13: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 14: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 15: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 16: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 17: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 18: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 19: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 20: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 21: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 22: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 23: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 24: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 25: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 26: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 27: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 28: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 29: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 30: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 31: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 32: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 33: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 34: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 35: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 36: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 37: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 38: index 2 is out of bounds for dimension 0 with size 1
+   ⚠️ Error processing GOP 39: index 2 is out of bounds for dimension 0 with size 1
+
+📊 Results for MOT20:
+
+   I-frame Baseline:
+      Moving objects (1303): mAP = 0.3814
+      Static objects (365): mAP = 0.6272
+
+   Mean-VC Baseline:
+      Moving objects (0): mAP = 0.0000
+      Static objects (0): mAP = 0.0000
+
+   MV Model:
+      Moving objects (0): mAP = 0.0000
+      Static objects (0): mAP = 0.0000
+
+💾 Results saved to: results/three_method_comparison.json
+
+================================================================================
+📊 SUMMARY - THREE METHOD COMPARISON
+================================================================================
+
+Dataset    Method       Moving mAP   Static mAP   Moving N   Static N  
+--------------------------------------------------------------------------------
+MOT17      I-frame      0.4794       0.8850       404        187       
+           Mean-VC      0.0000       0.0000       0          0         
+           MV Model     0.0000       0.0000       0          0         
+--------------------------------------------------------------------------------
+MOT15      I-frame      0.2428       0.4616       690        104       
+           Mean-VC      0.0000       0.0000       0          0         
+           MV Model     0.0000       0.0000       0          0         
+--------------------------------------------------------------------------------
+MOT20      I-frame      0.3814       0.6272       1303       365       
+           Mean-VC      0.0000       0.0000       0          0         
+           MV Model     0.0000       0.0000       0          0         
+--------------------------------------------------------------------------------
+
+================================================================================
+💡 INTERPRETATION
+================================================================================
+
+Expected patterns:
+  • I-frame: HIGH static mAP, LOW moving mAP (assumes no motion)
+  • MV Model: HIGH moving mAP, GOOD static mAP (tracks motion)
+  • Mean-VC: MEDIUM both (interpolates between)
+
+
+Key Insights:
+  1. I-frame fails on moving objects → motion tracking is essential
+  2. MV model improves moving object detection significantly
+  3. MV model maintains good performance on static objects
+
+
+========================================
+Comparison complete!
+Results saved to: results/three_method_comparison.json
+========================================

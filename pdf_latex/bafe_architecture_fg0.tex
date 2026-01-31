@@ -1,0 +1,266 @@
+
+\documentclass[border=8pt, multi, tikz]{standalone} 
+\usepackage{import}
+\subimport{../PlotNeuralNet/layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+\usepackage{amsmath}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{decorations.pathreplacing}
+
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
+\def\FcColor{rgb:blue,5;red,2.5;white,5}
+\def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\SoftmaxColor{rgb:magenta,5;black,7}   
+\def\SumColor{rgb:blue,5;green,15}
+
+\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+\tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
+\begin{scope}[scale=2.0]
+\coordinate (orig_frame) at (0,12,0);\coordinate (dct_frame) at (0,6,0);\coordinate (mv_frame) at (0,0,0);\coordinate (boxes_prev) at (0,-6,0);
+\draw[decorate, decoration={brace, amplitude=18pt, raise=6pt}, line width=2.5pt, black!100] 
+    ($(-2.5,-1.2,0) + (-0.7,0,0)$) -- ($(-0.2,6.9,0) + (-3.0,0,0)$) 
+    node[midway, left=24pt, font=\LARGE, align=center, text=black] {P-Frame\\[1pt]$f_n^g$};
+
+\draw[decorate, decoration={brace, amplitude=18pt, raise=6pt}, line width=2.5pt, teal!80!black] 
+    ($(-2.5,7.8,0) + (-0.7,0,0)$) -- ($(-0.2,13.5,0) + (-3.0,0,0)$) 
+    node[midway, left=24pt, font=\LARGE, align=center, text=teal!90!black] {Reference\\[1pt]$f_0^g$};
+\node[anchor=east, font=\huge, align=right, text=black] at ($(2,12,0) + (-2.5,0,0)$) {\textbf{Compressed $Y_0^g$}\\[1pt]$120{\times}120{\times}64$};
+\pic[shift={(4.0,0,0)}] at (1.75,12,0) 
+    {Box={
+        name=ref_y_conv,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=3.2,
+        depth=12
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=6.0cm] at ($(ref_y_conv-south) + (0,-1.5,0)$) {\textbf{Conv $s{=}2$}\\[2pt]$60{\times}60{\times}64$};\draw [connection] (orig_frame) -- (ref_y_conv-west);\coordinate (cbcr_frame) at (0,9,0);\node[anchor=east, font=\huge, align=right, text=black] at ($(cbcr_frame) + (0.1,0,0)$) {\textbf{Compressed $Cb/Cr$}\\[1pt]$60{\times}60{\times}64{\times}2$};
+\pic[shift={(9.0,0,0)}] at (ref_y_conv-east) 
+    {Box={
+        name=ref_concat,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=3.0,
+        depth=10
+        }
+    };
+\node[font=\huge, align=center, text=black, text width=6.0cm] at ($(ref_concat-south) + (0,-1.5,0)$) {\textbf{Concat}\\[2pt]$60{\times}60{\times}64{\times}3$};\draw [connection] (ref_y_conv-east) -- node[below=28pt, font=\huge, align=center, text=black] {$Y$ Features\\[1pt]$60{\times}60{\times}64$} (ref_concat-west);\draw [connection] (cbcr_frame) -- ++(7.3,0) node[pos=0.65, right=44pt, font=\huge, align=center, text=black] {} |- (ref_concat-west);
+\pic[shift={(9.0,0,0)}] at (ref_concat-east) 
+    {Box={
+        name=rtdetr_backbone,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=3.4,
+        depth=12
+        }
+    };
+\node[font=\huge, align=center, text=black, text width=6.4cm] at ($(rtdetr_backbone-south) + (0,-1.5,0)$) {\textbf{RT-DETR Backbone}\\[2pt]$60{\times}60{\times}256$};\draw [connection] (ref_concat-east) -- node[below=28pt, font=\huge, align=center, text=black] {Compressed Features\\[1pt]$60{\times}60{\times}64{\times}3$} (rtdetr_backbone-west);
+\pic[shift={(9.0,0,0)}] at (rtdetr_backbone-east) 
+    {Box={
+        name=rtdetr_encoder,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=3.0,
+        depth=12
+        }
+    };
+\node[font=\huge, align=center, text=black, text width=6.0cm] at ($(rtdetr_encoder-south) + (0,-1.5,0)$) {\textbf{RT-DETR Encoder}\\[2pt]$N{\times}256$};\draw [connection] (rtdetr_backbone-east) -- node[below=28pt, font=\huge, align=center, text=black] {Flattened Tokens\\[1pt]$N{\times}256$} (rtdetr_encoder-west);
+\pic[shift={(8.6,0,0)}] at (rtdetr_encoder-east) 
+    {Box={
+        name=rtdetr_decoder,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.8,
+        depth=10
+        }
+    };
+\node[font=\huge, align=center, text=black, text width=6.4cm] at ($(rtdetr_decoder-south) + (0,-1.6,0)$) {\textbf{RT-DETR Heads}\\[2pt]$N{\times}256$};\draw [connection] (rtdetr_encoder-east) -- node[below=28pt, font=\huge, align=center, text=black] {Decoder Queries\\[1pt]$N{\times}256$} (rtdetr_decoder-west);
+\pic[shift={(9.0,0,0)}] at (rtdetr_decoder-east) 
+    {Box={
+        name=rtdetr_boxes,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=16,
+        width=1.6,
+        depth=2
+        }
+    };
+\node[font=\huge, align=center, text=black, text width=5.6cm] at ($(rtdetr_boxes-south) + (0,-1.4,0)$) {\textbf{Initial Boxes}\\$bb_0(n)$\\$N{\times}5$};\draw [connection] (rtdetr_decoder-east) -- node[below=28pt, font=\huge, align=center, text=black] {RT-DETR Boxes\\[1pt]$N{\times}5$} (rtdetr_boxes-west);\node[anchor=east, font=\LARGE, align=right, text=black] at ($(2,6,0) + (-2.3,0,0)$) {\textbf{$\Delta Y_n^g$}\\[1pt]$120{\times}120{\times}64$};
+\pic[shift={(2.0,0,0)}] at (1.75,6,0) 
+    {Box={
+        name=dct_conv,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.6,
+        depth=14
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=5.6cm] at ($(dct_conv-south) + (0,-1.4,0)$) {\textbf{Conv $1{\times}1$}\\[2pt]$120{\times}120{\times}32$};\draw [connection] (dct_frame) -- (dct_conv-west);
+\pic[shift={(7.0,0,0)}] at (dct_conv-east) 
+    {Box={
+        name=dct_roi,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.6,
+        depth=9
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=6.0cm] at ($(dct_roi-south) + (0,-1.4,0)$) {\textbf{BAFE-DCT}\\[2pt]$N{\times}30{\times}30{\times}32$};\draw [connection] (dct_conv-east) -- node[below=28pt, font=\huge, align=center, text=black] {Encoded DCT\\[1pt]$120{\times}120{\times}32$} (dct_roi-west);\coordinate (dct_stats) at ($(dct_roi-east) + (6.4,0,0)$);\draw [connection] (dct_roi-east) -- node[below=28pt, font=\huge, align=center, text=black] {DCT A-Features\\[1pt]$N{\times}128$} (dct_stats);\node[anchor=east, font=\LARGE, align=right, text=black] at ($(2,0,0) + (-2.3,0,0)$) {\textbf{$MV_n^g$}\\[1pt]$60{\times}60{\times}2$};
+\pic[shift={(3.5,0,0)}] at (1.5,0,0) 
+    {Box={
+        name=mv_roi,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.6,
+        depth=9
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=6.0cm] at ($(mv_roi-south) + (0,-1.4,0)$) {\textbf{BAFE-MV}\\[2pt]$N{\times}15{\times}15{\times}2$};\draw [connection] (mv_frame) -- (mv_roi-west);\coordinate (mv_stats) at ($(mv_roi-east) + (6.4,0,0)$);\draw [connection] (mv_roi-east) -- node[below=28pt, font=\huge, align=center, text=black] {MV A-Features\\[1pt]$N{\times}128$} (mv_stats);\draw[-Stealth, dashed, line width=2.8pt, draw=green!70!black] (rtdetr_boxes-east) -- ++(6.0,0) |- ($(boxes_prev) + (6.0,-1.0,0)$) -| (boxes_prev);\node[anchor=west, font=\huge, text=green!60!black, fill=green!15, inner sep=4pt, rounded corners=4pt, draw=green!40!black, line width=1.4pt] at ($(boxes_prev) + (1,-0.65,0)$) {Warm-start $bb(n{-}1)$ input};\node[anchor=east, font=\LARGE, align=right, text=black] at ($(2,-6,0) + (-0.3,0,0)$) {\textbf{$bb(n{-}1)$}\\[1pt]$N{\times}5$};
+\pic[shift={(3.5,0,0)}] at (3.7,-6,0) 
+    {Box={
+        name=box_enc,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=16,
+        width=2.4,
+        depth=2
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=5.0cm] at ($(box_enc-south) + (0,-1.2,0)$) {\textbf{MLP}\\$5{\rightarrow}32$};\draw [connection] (boxes_prev) -- (box_enc-west);
+\pic[shift={(1.8,-10.5,0)}] at ($(dct_stats) + (3.5,0,0)$) 
+    {Box={
+        name=concat,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=20,
+        width=2.8,
+        depth=13
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=5.6cm] at ($(concat-south) + (0,-1.4,0)$) {\textbf{Concat}\\$N{\times}288$};\draw [connection] (mv_stats) -- ++(1.5,0) |- (concat-west);\draw [connection] (dct_stats) -- ++(1.5,0) |- (concat-west);\draw [connection] (box_enc-east) -- node[above=28pt, font=\huge, align=center, text=black] {Encoded Boxes\\[1pt]$N{\times}32$} ++(5.5,0) |- (concat-west);
+\pic[shift={(2.2,0,0)}] at (concat-east) 
+    {Box={
+        name=lstm,
+        caption=,
+        xlabel={{" ","dummy"}},
+        zlabel=,
+        fill=\SoftmaxColor,
+        opacity=0.8,
+        height=20,
+        width=3.0,
+        depth=13
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=6.0cm] at ($(lstm-south) + (0,-1.4,0)$) {\textbf{BiLSTM}\\$N{\times}128$};
+\draw [connection]  (concat-east)    -- node {\midarrow} (lstm-west);
+\coordinate (refinement) at ($(lstm-east) + (6.0,0,0)$);\draw [connection] (lstm-east) -- node[below=28pt, font=\huge, align=center, text=black] {Refinements\\[1pt]$N{\times}5$} (refinement);
+\pic[shift={(0,0,0)}] at (refinement) 
+    {Box={
+        name=boxes_out,
+        caption=,
+        xlabel={{, }},
+        zlabel=,
+        fill=\ConvColor,
+        height=16,
+        width=1.0,
+        depth=2
+        }
+    };
+\node[font=\LARGE, align=center, text=black, text width=5.4cm] at ($(boxes_out-south) + (0,-1.3,0)$) {\textbf{ABoxes}\\$bb(n)$\\$N{\times}5$};\draw [connection] (refinement) -- (boxes_out-west);\draw[-Stealth, red!70!black, line width=2.8pt, dashed, opacity=0.8] (boxes_out-east) -- ++(2.4,0) node[pos=0.55, right=10pt, font=\bfseries\Large, text=red!75!black] {Sequentially updates $bb(n{-}1)$} |- ++(0,-5.0) -| (boxes_prev);
+% Input Stage overlay (extended for orig frame)
+\begin{scope}[on background layer]
+\fill[purple!8, rounded corners=15pt] 
+    ($(0,-6,0) + (-6.3, -2.5, -2.5)$) rectangle 
+    ($(1,12,0) + (0.3, 2.90, 2.5)$);
+\draw[purple!70!black, line width=3pt, rounded corners=15pt] 
+    ($(0,-6,0) + (-6.3, -2.5, -2.5)$) rectangle 
+    ($(1,12,0) + (0.3, 2.90, 2.5)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\LARGE, text=purple!90!black, fill=purple!15, inner sep=5pt, rounded corners=5pt, draw=purple!70!black, line width=2pt] at 
+    ($(-1.5,10.5,0) + (-3.5, 3.0, 0)$) {Inputs};
+
+% Compressed Reference Processing overlay
+\begin{scope}[on background layer]
+\fill[teal!8, rounded corners=15pt] 
+    ($(ref_y_conv-nearsouthwest) + (-4.2, -3.4, -3.2)$) rectangle 
+    ($(rtdetr_boxes-nearnortheast) + (7.6, 2.4, 3.2)$);
+\draw[teal!70!black, line width=3pt, rounded corners=15pt] 
+    ($(ref_y_conv-nearsouthwest) + (-4.2, -3.4, -3.2)$) rectangle 
+    ($(rtdetr_boxes-nearnortheast) + (7.6, 2.4, 3.2)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\huge, text=teal!90!black, fill=teal!15, inner sep=5pt, rounded corners=5pt, draw=teal!70!black, line width=2pt] at 
+    ($(rtdetr_boxes-nearnortheast) + (-0.8, 1.0, 0)$) {Compressed Reference RT-DETR};
+\node[anchor=north west, font=\bfseries\LARGE, text=teal!90!black, fill=teal!15, inner sep=4pt, rounded corners=4pt, draw=teal!50!black, line width=1pt] at 
+    ($(rtdetr_boxes-nearnortheast) + (-0.8, 0.0, 0)$) {\textbf{Warm-starts Initial boxes}};
+\node[anchor=north west, font=\bfseries\LARGE, text=teal!90!black, fill=teal!15, inner sep=4pt, rounded corners=4pt, draw=teal!50!black, line width=1pt] at 
+    ($(rtdetr_boxes-nearnortheast) + (0.8, -1.2, 0)$) {\textbf{~28M params}};
+
+% BAFE Extraction overlay (MV + DCT)
+\begin{scope}[on background layer]
+\fill[blue!8, rounded corners=15pt] 
+    ($(mv_roi-nearsouthwest) + (-3.9, -7.7, -3.4)$) rectangle 
+    ($(dct_roi-nearnortheast) + (8.6, 2.9, 3.4)$);
+\draw[blue!70!black, line width=3pt, rounded corners=15pt] 
+    ($(mv_roi-nearsouthwest) + (-3.9, -7.7, -3.4)$) rectangle 
+    ($(dct_roi-nearnortheast) + (8.6, 2.9, 3.4)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\huge, text=blue!90!black, fill=blue!15, inner sep=5pt, rounded corners=5pt, draw=blue!70!black, line width=2pt] at 
+    ($(dct_roi-nearnortheast) + (-5.5, 1.3, 0)$) {\textbf{BAFE Extraction}};
+\node[anchor=north west, font=\bfseries\LARGE, text=blue!90!black, fill=blue!15, inner sep=4pt, rounded corners=4pt, draw=blue!50!black, line width=1pt] at 
+    ($(dct_roi-nearnortheast) + (-6.0, 0.5, 0)$) {\textbf{~70K params}};
+
+% Fusion & Temporal overlay (updated concat size)
+\begin{scope}[on background layer]
+\fill[orange!8, rounded corners=15pt] 
+    ($(concat-nearsouthwest) + (-4.6, -8.35, -3.5)$) rectangle 
+    ($(boxes_out-nearnortheast) + (10.15, 8.6, 3.5)$);
+\draw[orange!70!black, line width=3pt, rounded corners=15pt] 
+    ($(concat-nearsouthwest) + (-4.6, -8.35, -3.5)$) rectangle 
+    ($(boxes_out-nearnortheast) + (10.15, 8.6, 3.5)$);
+\end{scope}
+\node[anchor=north west, font=\bfseries\huge, text=orange!90!black, fill=orange!15, inner sep=5pt, rounded corners=5pt, draw=orange!70!black, line width=2pt] at 
+    ($(concat-nearnortheast) + (0, 5.6, 0)$) {Fusion \& Temporal};
+\node[anchor=north west, font=\bfseries\LARGE, text=orange!90!black, fill=orange!15, inner sep=4pt, rounded corners=4pt, draw=orange!50!black, line width=1pt] at 
+    ($(concat-nearnortheast) + (0, 4.2, 0)$) {\textbf{~220K params}};
+\end{scope}
+\end{tikzpicture}
+\end{document}
