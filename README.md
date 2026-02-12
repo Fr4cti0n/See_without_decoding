@@ -17,7 +17,6 @@ BAFE (Box-Aligned Feature Extraction) is the tracking/detection head in this pro
 - Lightweight extraction stage (~tens of thousands of params) intended for fast MOTS experiments.
 
 ## Where to look in this repo
-- Architecture diagrams and generator: pdf_latex/generate_architecture_roi_clear.py and pdf_latex/bafe_architecture_fg0.tex
 - End-to-end experiments and training scripts: mots_exp/scripts/ (e.g., train_mv_center.py) and root-level train_*.sh helpers.
 - Evaluation helpers: evaluate_* scripts under the repo root.
 
