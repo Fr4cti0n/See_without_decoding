@@ -39,10 +39,8 @@ python evaluate_mv_only_by_dataset.py --checkpoint checkpoints/your_model.pt
 
 ## Tips
 - Keep the MV and DCT crops synchronized; mismatched grid sizes will break the extraction stage.
-- Use the diagram generator when tweaking shapes to confirm tensor sizes stay consistent.
 - For speed/latency comparisons, see benchmark_fast_models.sh and benchmark_model_speed.py.
 
 ## Outputs
 - Checkpoints land in checkpoints/ unless overridden.
 - Logs are saved alongside training scripts (e.g., mv_center_training.log) for quick inspection.
-- Visual aids/diagrams are produced in pdf_latex/ and can be re-generated via the helper script.
